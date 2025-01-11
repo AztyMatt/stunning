@@ -1,0 +1,18 @@
+<a href="{{ path('project') }}" class="border border-gray-300 shadow-lg rounded-lg overflow-hidden block project-item" data-category="Mobile">
+    <div class="relative w-full aspect-[4/3]">
+        <img src="https://picsum.photos/id/{{ i + 500 }}/1200/800" alt="Image of PROJECT project" class="w-full h-full object-cover object-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex justify-between items-end p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <h3 class="text-white text-xl">Project {{ i }}</h3>
+            <span class="flex flex-row gap-4 text-white">
+                <span class="flex items-center gap-1">
+                    <twig:ux:icon name="tabler:heart" height="24" width="24" />
+                    <span>1K</span>
+                </span>
+                <span class="flex items-center gap-1">
+                    <twig:ux:icon name="tabler:eye" height="24" width="24" />
+                    <span>500</span>
+                </span>
+            </span>
+        </div>
+    </div>
+</a>

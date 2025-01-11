@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('border-black', 'font-semibold');
+                button.classList.add('border-transparent');
+            });
+            document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('border-black', 'font-semibold');
+            document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.remove('border-transparent');
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    {% include('parts/header.html.twig') %}
+    <main class="relative h-screen w-screen -mt-16">
+        <section class="h-full w-full">
+            <img src="https://picsum.photos/id/506/1920/1080" alt="Background image of PROJECT project" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white bg-gradient-to-t from-black/50">
+                <div class="flex flex-col items-center gap-4">
+                    <h1 class="text-5xl font-bold border-black">Waterfall</h1>
+                    <div class="flex gap-2">
+                        {% for i in 1..3 %}
+                            <a href="{{ path('profile') }}">
+                                <img src="https://avatar.iran.liara.run/public/{{ i }}" alt="Profile picture of USER" class="w-12 h-12 rounded-full">
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 w-full text-white py-4 px-8 flex justify-between items-center text-lg">
+                    <span class="text-2xl">My creations</span>
+                    {# <span>Private</span> #}
+                    <span class="flex flex-row gap-4">
+                        <span class="flex items-center gap-1">
+                            <twig:ux:icon name="tabler:heart" height="24" width="24" />
+                            <span>1K</span>
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <twig:ux:icon name="tabler:eye" height="24" width="24" />
+                            <span>500</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </section>
+        <section class="flex flex-col">
+            <nav class="px-8 overflow-x-auto border-b border-gray-300 shadow-lg">
+                <div class="flex items-center space-x-4">
+                    <button class="tab-button py-4 px-4 border-b-2 border-black focus:outline-none" onclick="switchTab('public-section')">Public</button>
+                    <button class="tab-button py-4 px-4 border-b-2 border-transparent focus:outline-none" onclick="switchTab('private-section')">Private</button>
+                </div>
+            </nav>
+            <div id="public-section" class="tab-content p-8 flex flex-col gap-8">
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Description</h2>
+                    <div class="flex flex-col gap-2">
+                        <div>
+                            <p class="text-lg text-gray-500">
+                                Waterfall est une application mobile intuitive et moderne dédiée à la gestion de projets collaboratifs. Inspirée par la méthodologie en cascade, elle permet une planification structurée et progressive des tâches, favorisant une exécution efficace des étapes. Dotée d'outils visuels interactifs, tels que des diagrammes et des tableaux de suivi, elle simplifie la communication entre les équipes. Accessible sur tout appareil, Waterfall offre une expérience fluide et centralisée pour optimiser la productivité et respecter les délais.
+                            </p>
+                        </div>
+                        <div class="flex flex-row justify-between">
+                            <div class="flex flex-row gap-3">
+                                {% set tags = ['#Waterfall', '#Mobile', '#ReactNative'] %}
+                                {% for tag in tags %}
+                                    {% include('parts/link.html.twig') with { 'text': tag } %}
+                                {% endfor %}
+                            </div>
+                            <p class="text-lg text-gray-500">Realised the 16/02/2003</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Gallery</h2>
+                    <div class="overflow-x-auto whitespace-nowrap">
+                        <div class="h-[500px] overflow-x-auto whitespace-nowrap inline-flex gap-3">
+                            {% for i in 1..3 %}
+                                <img src="https://picsum.photos/seed/{{ i }}/1170/2532" alt="Image of PROJECT project" class="h-full object-contain  border border-gray-300 shadow rounded-lg">
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Technologies</h2>
+                    <div class="flex gap-3">
+                        <div class="flex justify-center items-center py-2 px-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
+                            <twig:ux:icon name="tabler:brand-react" height="24" width="24" />
+                            <span class="text-md font-semibold">React Native</span>
+                        </div>
+                        <div class="flex justify-center items-center py-2 px-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
+                            <twig:ux:icon name="tabler:brand-symfony" height="24" width="24" />
+                            <span class="text-md font-semibold">Symfony</span>
+                        </div>
+                        <div class="flex justify-center items-center py-2 px-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
+                            <twig:ux:icon name="tabler:brand-docker" height="24" width="24" stroke-width="1.5"/>
+                            <span class="text-md font-semibold">Docker</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Useful Links</h2>
+                    <div class="flex gap-3">
+                        {% set links = ['Lien du site', 'Github'] %}
+                        {% for link in links %}
+                            {% include('parts/link.html.twig') with { 'text': link } %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Comments</h2>
+                    <div class="flex flex-col gap-3">
+                        {% for i in 1..3 %}
+                            {% include('parts/comment.html.twig') %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div id="private-section" class="tab-content hidden p-8 flex flex-col gap-8">
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Documentation</h2>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-lg text-gray-500">
+                            Waterfall est une application mobile dédiée à la gestion de projets collaboratifs, conçue pour l’entreprise "Cascade Solutions". Inspirée de la méthodologie en cascade, elle offre des outils interactifs pour planifier, suivre et communiquer efficacement à chaque étape, garantissant une exécution fluide et le respect des délais.
+                        </p>
+                        <div class="flex flex-row justify-end">
+                            <p class="text-lg text-gray-500">Updated on 01/01/2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Gallery</h2>
+                    <div class="overflow-x-auto whitespace-nowrap">
+                        <div class="h-[500px] overflow-x-auto whitespace-nowrap inline-flex gap-3">
+                            {% for i in 1..2 %}
+                                <img src="https://picsum.photos/seed/{{ i }}/1920/1080" alt="Image of PROJECT project" class="h-full object-contain border border-gray-300 shadow rounded-lg">
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Links</h2>
+                    <div class="flex gap-3">
+                        {% set links = ['Figma', 'Specifications document', 'BDD Scheme'] %}
+                        {% for link in links %}
+                            {% include('parts/link.html.twig') with { 'text': link } %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-2xl font-semibold">Comments</h2>
+                    <div class="flex flex-col gap-3">
+                        {% for i in 1..3 %}
+                            {% include('parts/comment.html.twig') %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
