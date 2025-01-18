@@ -5,8 +5,9 @@
 {% block body %}
     {% include('parts/header.html.twig') %}
     <main class="relative h-full w-screen flex flex-col">
+        {% include('parts/background.html.twig') %}
         <section class="relative flex flex-col items-center h-full m-8 px-8">
-            <form method="post" action="#" class="relative flex flex-col max-w-xl w-full bg-white border border-gray-500 shadow rounded-lg overflow-hidden">
+            <form method="post" action="#" class="relative flex flex-col max-w-xl w-full border border-gray-500 shadow rounded-lg overflow-hidden bg-white">
                 <div class="relative w-full h-40 group">
                     <div class="absolute z-10 flex justify-center items-center w-full h-full">
                         <button class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -26,7 +27,10 @@
                                 </div>
                                 <img src="https://avatar.iran.liara.run/public/1" alt="Profile picture of USER" class="w-full h-full rounded-full object-contain group-hover:filter group-hover:brightness-50 transition-filter duration-300">
                             </div>
-                            <input type="text" id="username" name="username" value="Admin" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2 text-center">
+                            <div class="w-full relative">
+                                <input type="text" id="username" name="username" value="Admin" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2 text-center">
+                                <span class="absolute text-red-500 -top-2 -right-3">*</span>
+                            </div>
                         </div>
                         <div class="w-full flex flex-col justify-between items-center text-gray-700">
                             <div class="flex flex-row gap-2 items-center w-full">
@@ -64,7 +68,7 @@
                                     </select>
                                 </div>
                                 <div class="flex flex-col gap-0.5">
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
                                     <input type="email" id="email" name="email" required class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
                                 </div>
                                 <div class="flex flex-col gap-0.5">
@@ -74,9 +78,9 @@
                             </div>
                         </div>
                     </div>
+                    <button type="submit" class="mt-2 py-2 px-4 max-w-xl w-full border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">Save Changes</button>
                 </div>
             </form>
-            <button type="submit" class="mt-4 inline-flex justify-center py-2 px-4 max-w-xl w-full border border-gray-500 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20">Save Changes</button>
         </section>
     </main>
 {% endblock %}

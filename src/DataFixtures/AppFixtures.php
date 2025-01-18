@@ -243,7 +243,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setUsername($userData['username']);
             $user->setEmail($userData['email']);
-            $user->setPassword('password');
+            $user->setPlainPassword('password');
             $user->setProfilePicture('https://avatar.iran.liara.run/public/' . ($i + 1));
             $user->setBanner('https://picsum.photos/id/' . ($i + 1) . '/1920/1080');
             $user->setWebsiteLink('https://example.com/' . $userData['username']);

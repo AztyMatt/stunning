@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-center items-center">
+        {% include('parts/background.html.twig') %}
+        <section class="relative w-full flex justify-center m-8 px-8 z-10">
+            <form method="post" class="relative flex gap-6 flex-col max-w-lg w-full bg-white border border-gray-500 shadow rounded-lg overflow-hidden p-8">
+                <div class="flex flex-col">
+                    <h1 class="text-2xl font-medium text-black">Please login</h1>
+                    {% if error %}
+                        <div>
+                            <span class="text-sm text-red-500">{{ error.messageKey }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-0.5">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                        <input type="email" value="{{ last_username }}" name="_email" id="email" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2" autocomplete="email" required autofocus>
+                    </div>
+                    <div class="flex flex-col gap-0.5">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password <span class="text-red-500">*</span></label>
+                        <input type="password" name="_password" id="password" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2" autocomplete="current-password" required>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="mt-4 flex flex-row gap-4">
+                        <a href="{{ path('app_register') }}" class="py-2 px-4 max-w-xl w-full border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white text-center cursor-pointer hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">Register</a>
+                        <button class="py-2 px-4 max-w-xl w-full border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" type="submit">
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+{% endblock %}
