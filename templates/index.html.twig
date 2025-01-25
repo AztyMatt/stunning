@@ -18,18 +18,9 @@
         <section class="flex flex-col gap-3">
             <h2 class="text-3xl font-semibold">Projects recently added</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {% for i in 1..10 %}
+                {% for project in recentProjects %}
                     <div class="flex flex-col shadow-lg rounded-lg border border-gray-300">
-                        {% include 'parts/project_card.html.twig' with {'i': i} %}
-                        <div class="flex justify-between p-4">
-                            <div class="flex flex-row items-end gap-2">
-                                <img src="https://avatar.iran.liara.run/public/{{ i }}" alt="Profile picture of USER" class="w-6 h-6 rounded-full">
-                                <p>Admin</p>
-
-                                {# <p>Multiple users</p> #}
-                            </div>
-                            <p>16/02/2003</p>
-                        </div>
+                        {% include 'parts/project_card.html.twig' with {'project': project, 'informations': true} %}
                     </div>
                 {% endfor %}
             </div>
@@ -37,18 +28,9 @@
         <section class="flex flex-col gap-3">
             <h2 class="text-3xl font-semibold">Popular right now</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {% for i in 1..10 %}
+                {% for project in popularProjects %}
                     <div class="flex flex-col shadow-lg rounded-lg border border-gray-300">
-                        {% include 'parts/project_card.html.twig' with {'i': i} %}
-                        <div class="flex justify-between p-4">
-                            <div class="flex flex-row items-end gap-2">
-                                <img src="https://avatar.iran.liara.run/public/{{ i }}" alt="Profile picture of USER" class="w-6 h-6 rounded-full">
-                                <p>Admin</p>
-
-                                {# <p>Multiple users</p> #}
-                            </div>
-                            <p>16/02/2003</p>
-                        </div>
+                        {% include 'parts/project_card.html.twig' with {'project': project, 'informations': true} %}
                     </div>
                 {% endfor %}
             </div>

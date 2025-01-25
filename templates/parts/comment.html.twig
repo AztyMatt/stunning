@@ -1,10 +1,14 @@
 <div class="w-full p-4 bg-white border border-gray-300 shadow rounded-lg">
-    <div class="flex items-center space-x-2 mb-4">
-        <img src="https://avatar.iran.liara.run/public/{{ i }}" alt="Profile picture of USER" class="h-8 w-8 object-cover rounded-full">
-        <span class="font-bold">User {{ i }}</span>
+    <div class="w-full flex items-start">
+        <a href="{{ path('profile_view', {id: comment.author.id}) }}">
+            <div class="flex items-center space-x-2 mb-4">
+                <img src="{{ comment.author.profilePicture }}" alt="Profile picture of {{ comment.author.username }}" class="h-8 w-8 object-cover rounded-full">
+                <span class="font-bold">{{ comment.author.username }}</span>
+            </div>
+        </a>
     </div>
     <p class="text-gray-700">
-        Waterfall est un projet très prometteur ! L'application est intuitive et bien conçue, avec une planification claire des tâches inspirée de la méthode en cascade. Les outils visuels comme les diagrammes et tableaux de suivi facilitent la gestion des projets collaboratifs, et la compatibilité multiplateforme assure une expérience fluide. Un excellent outil pour optimiser la productivité et respecter les délais.
+        {{ comment.content }}
     </p>
-    <p class="text-sm text-gray-600 text-right mt-2">Published the 16/02/2003</p>
+    <p class="text-sm text-gray-600 text-right mt-2">Published the {{ comment.createdAt|date('d/m/Y') }}</p>
 </div>

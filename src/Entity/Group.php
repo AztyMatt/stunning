@@ -27,7 +27,7 @@ class Group
     /**
      * @var Collection<int, Project>
      */
-    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'collection')]
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'groups')]
     private Collection $projects;
 
     public function __construct()
@@ -80,7 +80,7 @@ class Group
             }
 
             $this->projects->add($project);
-            $project->setCollection($this);
+            $project->addGroup($this);
         }
 
         return $this;
@@ -89,10 +89,7 @@ class Group
     public function removeProject(Project $project): static
     {
         if ($this->projects->removeElement($project)) {
-            // set the owning side to null (unless already changed)
-            if ($project->getCollection() === $this) {
-                $project->setCollection(null);
-            }
+            $project->removeGroup($this);
         }
 
         return $this;

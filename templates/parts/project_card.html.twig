@@ -1,18 +1,33 @@
-<a href="{{ path('project') }}" class="border border-gray-300 shadow-lg rounded-lg overflow-hidden block project-item" data-category="Mobile">
-    <div class="relative w-full aspect-[4/3]">
-        <img src="https://picsum.photos/id/{{ i + 500 }}/1200/800" alt="Image of PROJECT project" class="w-full h-full object-cover object-center">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex justify-between items-end p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
-            <h3 class="text-white text-xl">Project {{ i }}</h3>
+{% set informations = informations | default(false) %}
+
+<a href="{{ path('project', {id: project.id}) }}" class="border border-gray-300 shadow-lg rounded-lg overflow-hidden block h-full">
+    <div class="relative w-full aspect-[4/3] group">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex justify-between items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <h3 class="text-white text-xl">{{ project.name }}</h3>
             <span class="flex flex-row gap-4 text-white">
                 <span class="flex items-center gap-1">
                     <twig:ux:icon name="tabler:heart" height="24" width="24" />
-                    <span>1K</span>
+                    <span>{{ project.likes }}</span>
                 </span>
                 <span class="flex items-center gap-1">
                     <twig:ux:icon name="tabler:eye" height="24" width="24" />
-                    <span>500</span>
+                    <span>{{ project.numberOfViews }}</span>
                 </span>
             </span>
         </div>
+        {% include('parts/media.html.twig') with { 'media':project.publicInformations.medias[0] } %}
     </div>
+    {% if informations %}
+        <div class="flex justify-between items-end p-4">
+            <div class="flex flex-row items-end gap-2">
+                {% if project.users|length == 1 %}
+                    <img src="{{ project.users[0].profilePicture }}" alt="Profile picture of {{ project.users[0].username }}" class="w-6 h-6 rounded-full">
+                    <p>{{ project.users[0].username }}</p>
+                {% else %}
+                    <p>Multiple users</p>
+                {% endif %}
+            </div>
+            <p class="text-sm text-gray-500">{{ project.createdAt|date('d/m/Y') }}</p>
+        </div>
+    {% endif %}
 </a>

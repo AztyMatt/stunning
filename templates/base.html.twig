@@ -14,6 +14,20 @@
 
         {% block javascripts %}
         {% endblock %}
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll("video").forEach(video => {
+                    video.addEventListener("mouseenter", () => {
+                        video.play();
+                    });
+                    video.addEventListener("mouseleave", () => {
+                        video.pause();
+                        video.currentTime = 0;
+                    });
+                });
+            });
+        </script>
     </head>
     <body class="overflow-x-hidden overscroll-none">
         {% block body %}{% endblock %}

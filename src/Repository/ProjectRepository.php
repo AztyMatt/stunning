@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Enum\ProjectVisibilityEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,35 @@ class ProjectRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Project::class);
+    }
+
+    /**
+     * @return Project[] Returns an array of recent Project objects
+     */
+    public function findRecentProjects($maxResults): array
+    {
+        return $this->createQueryBuilder('project')
+            ->andWhere('project.visibility = :visibility')
+            ->setParameter('visibility', ProjectVisibilityEnum::PUBLIC->value)
+            ->orderBy('project.createdAt', 'ASC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Project[] Returns an array of popular Project objects
+     */
+    public function findPopularProjects($maxResults): array
+    {
+        return $this->createQueryBuilder('project')
+            ->andWhere('project.visibility = :visibility')
+            ->setParameter('visibility', ProjectVisibilityEnum::PUBLIC->value)
+            ->orderBy('project.likes', 'DESC')
+            ->addOrderBy('project.numberOfViews', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

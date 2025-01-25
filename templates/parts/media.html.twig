@@ -1,0 +1,10 @@
+{% set card = card | default(false) %}
+{% set cardClass = card ? 'rounded-lg border border-gray-300' : '' %}
+
+{% if media.type.name == 'IMAGE' %}
+    <img src="{{ media.file starts with 'http' ? media.file : asset('images/templates/' ~ media.file) }}" alt="Image of {{ project.name }} project" class="w-full h-full object-cover object-center {{ cardClass }}">
+{% elseif media.type.name == 'VIDEO' %}
+    <video class="w-full h-full object-cover object-center {{ cardClass }}" muted loop>
+        <source src="{{ media.file starts with 'http' ? media.file : asset('images/templates/' ~ media.file) }}" type="video/mp4">
+    </video>
+{% endif %}

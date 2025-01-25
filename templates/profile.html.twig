@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profile of Admin{% endblock %}
+{% block title %}Profile of {{ user.username }}{% endblock %}
 
 {% block javascripts %}
     <script>
-        function filterProjects(category) {
+        function filterProjects(group) {
             const projects = document.querySelectorAll('.project-item');
             projects.forEach(project => {
-                if (category === 'All' || project.dataset.category === category) {
+                const groups = project.dataset.groups.split(',');
+                if (group === 'All' || groups.includes(group)) {
                     project.style.display = 'block';
                 } else {
                     project.style.display = 'none';
@@ -16,7 +17,7 @@
 
             const buttons = document.querySelectorAll('button');
             buttons.forEach(button => {
-                if (button.textContent.trim() === category) {
+                if (button.textContent.trim() === group) {
                     button.classList.add('border-black');
                     button.classList.remove('border-transparent');
                 } else {
@@ -30,65 +31,90 @@
 
 {% block body %}
     {% include('parts/header.html.twig') %}
-    <main class="relative h-full w-screen -mt-16 flex flex-col">
+    <main class="relative h-screen w-screen -mt-16 flex flex-col">
         <section class="h-80 relative">
-            <img src="https://picsum.photos/id/506/1920/1080" alt="Banner of USER" class="inset-0 w-full h-full object-cover bg-center">
+            {% if user.banner %}
+                <img src="{{ user.banner }}" alt="Banner of {{ user.username }}" class="inset-0 w-full h-full object-cover bg-center">
+            {% else %}
+                {% include 'parts/background.html.twig' with {'banner': true} %}
+            {% endif %}
         </section>
-        <section class="relative flex flex-row h-full flex-grow">
-            <aside class="relative flex flex-col gap-4 w-1/4 bg-white border-r border-gray-300 shadow-lg">
+        <section class="relative flex flex-row flex-grow">
+            <aside class="relative flex flex-col gap-4 h-full w-1/4 bg-white border-r border-gray-300 shadow-lg">
                 <div class="flex flex-col items-center gap-1 absolute top-[-4rem] w-full px-8">
-                    <img src="https://avatar.iran.liara.run/public/1" alt="Profile picture of USER" class="rounded-full w-full h-full max-w-32 max-h-32 object-contain border-4 border-white">
-                    <h2 class="text-xl font-semibold text-center">Admin</h2>
+                    <img src="{{ user.profilePicture }}" alt="Profile picture of {{ user.username }}" class="rounded-full w-full h-full max-w-32 max-h-32 object-contain border-4 border-white">
+                    <h2 class="text-xl font-semibold text-center">{{ user.username }}</h2>
                 </div>
-                <div class="flex flex-col gap-6 p-8 text-gray-700 mt-24">
+                <div class="flex flex-col gap-6 p-8 text-gray-700 mt-[5.5rem]">
                     <div class="flex flex-col gap-1">
-                        <p>Short description about the user. Short description about the user.</p>
+                        {# <p>Short description about the user. Short description about the user.</p> #}
                         <div>
-                            <span class="flex flex-row items-center gap-1">
-                                <twig:ux:icon name="tabler:external-link" height="24" width="24" />
-                                <a href="#">www.example.com</a>
-                            </span>
-                            <span class="flex flex-row items-center gap-1">
-                                <twig:ux:icon name="tabler:world" height="24" width="24" />
-                                <p>France</p>
-                            </span>
+                            {% if user.websiteLink %}
+                                <span class="flex flex-row items-center gap-1">
+                                    <twig:ux:icon name="tabler:external-link" height="24" width="24" class="flex-shrink-0" />
+                                    <a href="{{ user.websiteLink }}" class="truncate">{{ user.websiteLink }}</a>
+                                </span>
+                            {% endif %}
+                            {% if user.country %}
+                                <span class="flex flex-row items-center gap-1">
+                                    <twig:ux:icon name="tabler:world" height="24" width="24" class="flex-shrink-0" />
+                                    <p>{{ user.country.value }} </p>
+                                </span>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="border border-gray-300">
-                        <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
-                            <twig:ux:icon name="tabler:brand-x" height="24" width="24" />
-                            <a href="#">X (Twitter)</a>
+                    {% if user.socialMedias %}
+                        <div class="border border-gray-300">
+                            {% if user.socialMedias.xTwitter %}
+                                <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
+                                    <twig:ux:icon name="tabler:brand-x" height="24" width="24" class="flex-shrink-0" />
+                                    <a href="{{ user.socialMedias.xTwitter }}">X (Twitter)</a>
+                                </div>
+                            {% endif %}
+                            {% if user.socialMedias.instagram %}
+                                <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
+                                    <twig:ux:icon name="tabler:brand-instagram" height="24" width="24" class="flex-shrink-0" />
+                                    <a href="{{ user.socialMedias.instagram }}">Instagram</a>
+                                </div>
+                            {% endif %}
+                            {% if user.socialMedias.github %}
+                                <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
+                                    <twig:ux:icon name="tabler:brand-github" height="24" width="24" class="flex-shrink-0" />
+                                    <a href="{{ user.socialMedias.github }}">Github</a>
+                                </div>
+                            {% endif %}
+                            {% if user.socialMedias.figma %}
+                                <div class="flex flex-row gap-2 p-2">
+                                    <twig:ux:icon name="tabler:brand-figma" height="24" width="24" class="flex-shrink-0" />
+                                    <a href="{{ user.socialMedias.figma }}">Figma</a>
+                                </div>
+                            {% endif %}
                         </div>
-                        <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
-                            <twig:ux:icon name="tabler:brand-instagram" height="24" width="24" />
-                            <a href="#">Instagram</a>
-                        </div>
-                        <div class="flex flex-row gap-2 border-b border-gray-300 p-2">
-                            <twig:ux:icon name="tabler:brand-github" height="24" width="24" />
-                            <a href="#">Github</a>
-                        </div>
-                        <div class="flex flex-row gap-2 p-2">
-                            <twig:ux:icon name="tabler:brand-figma" height="24" width="24" />
-                            <a href="#">Figma</a>
-                        </div>
-                    </div>
-                    <p>Member since 02/16/2003</p>
+                    {% endif %}
+                    <p>Member since {{ user.createdAt|date('d/m/Y') }}</p>
                 </div>
             </aside>
-            <div class="w-full">
+            <div class="w-full bg-white flex flex-col flex-grow">
                 <nav class="px-8 overflow-x-auto border-b border-gray-300 shadow-lg">
                     <div class="flex items-center space-x-4">
-                        {% for category in ['All', 'Web', 'Mobile', 'Design', 'Others'] %}
-                            <button class="py-4 px-4 border-b-2 {% if loop.first %}border-black{% else %}border-transparent{% endif %} focus:outline-none" onclick="filterProjects('{{ category }}')">
-                                {{ category }}
+                        <button class="py-4 px-4 border-b-2 border-black focus:outline-none" onclick="filterProjects('All')">All</button>
+                        {% for group in groupsWithPublicProjects %}
+                            <button class="py-4 px-4 border-b-2 border-transparent focus:outline-none" onclick="filterProjects('{{ group.name }}')">
+                                {{ group.name }}
                             </button>
                         {% endfor %}
                     </div>
                 </nav>
-                <div id="projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-8 pt-8">
-                    {% for i in 1..10 %}
-                        {% include 'parts/project_card.html.twig' with {'i': i} %}
-                    {% endfor %}
+                <div id="projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
+                    {% if publicProjects is empty %}
+                        <p>{{ user.username }} doesn't have any public projects.</p>
+                    {% else %}
+                        {% for project in publicProjects %}
+                            <div class="project-item" data-groups="{{ project.groups|filter(g => g.owner == user)|map(g => g.name)|join(',') }}">
+                                {% include 'parts/project_card.html.twig' with {'project': project} %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </section>

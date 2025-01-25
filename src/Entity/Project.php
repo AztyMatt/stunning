@@ -32,10 +32,6 @@ class Project
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private ?Group $collection = null;
-
     #[ORM\OneToOne(inversedBy: 'project', cascade: ['persist', 'remove'])]
     private ?ProjectPublicInformations $publicInformations = null;
 
@@ -66,6 +62,12 @@ class Project
     #[ORM\OneToMany(targetEntity: Invitation::class, mappedBy: 'project')]
     private Collection $invitations;
 
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'projects',  cascade: ['persist', 'remove'])]
+    private Collection $groups;
+
     public function __construct()
     {
         $this->visibility = ProjectVisibilityEnum::PUBLIC;
@@ -76,6 +78,7 @@ class Project
         $this->users = new ArrayCollection();
         $this->technologies = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,18 +142,6 @@ class Project
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getCollection(): ?Group
-    {
-        return $this->collection;
-    }
-
-    public function setCollection(?Group $collection): static
-    {
-        $this->collection = $collection;
 
         return $this;
     }
@@ -279,6 +270,33 @@ class Project
             if ($invitation->getProject() === $this) {
                 $invitation->setProject(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): static
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->addProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): static
+    {
+        if ($this->groups->removeElement($group)) {
+            $group->removeProject($this);
         }
 
         return $this;

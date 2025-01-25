@@ -1,27 +1,35 @@
 <header class="relative px-6 py-4 h-16 flex justify-between items-center bg-white shadow-lg w-full z-10">
     <div class="flex flex-row items-center gap-4">
         <h1 class="text-4xl font-semibold"><a href="{{ path('home') }}">Stunning</a></h1>
-        {# <div class="bg-white text-black border-2 border-black rounded">
-            <a href="#" class="flex items-center gap-2 px-4 py-2">
+        {% if app.user and is_granted('ROLE_ADMIN') %}
+            <div class="bg-white text-black border-2 border-black rounded">
+                <a href="#" class="flex items-center gap-2 px-4 py-2">
                 <twig:ux:icon name="tabler:database" height="24" width="24" />
                 <span>Admin</span>
-            </a>
-        </div> #}
+                </a>
+            </div>
+        {% endif %}
     </div>
-    <div class="relative group">
-        <a href="{{ path('profile') }}" class="flex flex-row items-center gap-4">
-            <span class="text-xl">admin@stunning.com</span>
-            <img src="https://avatar.iran.liara.run/public/1" alt="Profile picture of USER" class="rounded-full h-10 w-10 object-contain">
-        </a>
-        <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-            <a href="{{ path('settings') }}" class="block flex flex-row-reverse justify-between px-4 py-2 text-gray-700 hover:bg-gray-100 z-30">
-                <twig:ux:icon name="tabler:settings" height="24" width="24" />
-                <span>Settings</span>
+    {% if app.user %}
+        <div class="relative group">
+            <a href="{{ path('profile_view', {'id': app.user.id}) }}" class="flex flex-row items-center gap-4">
+                <span class="text-xl">{{ app.user.username }}</span>
+                <img src="{{ app.user.profilePicture }}" alt="Profile picture of {{ app.user.username }}" class="rounded-full h-10 w-10 object-contain">
             </a>
-            <a href="{{ path('app_logout') }}" class="block flex flex-row-reverse justify-between px-4 py-2 text-red-500 hover:bg-gray-100 z-30">
-                <twig:ux:icon name="tabler:logout" height="24" width="24" />
-                <span>Logout</span>
-            </a>
+            <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                <a href="{{ path('profile_settings') }}" class="block flex flex-row-reverse justify-between px-4 py-2 text-gray-700 hover:bg-gray-100 z-30">
+                    <twig:ux:icon name="tabler:settings" height="24" width="24" />
+                    <span>Settings</span>
+                </a>
+                <a href="{{ path('app_logout') }}" class="block flex flex-row-reverse justify-between px-4 py-2 text-red-500 hover:bg-gray-100 z-30">
+                    <twig:ux:icon name="tabler:logout" height="24" width="24" />
+                    <span>Logout</span>
+                </a>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="relative flex flex-row w-32">
+            <a href="{{ path('app_login') }}" class="py-2 px-4 max-w-xl w-full border border-gray-300 shadow text-lg font-medium rounded-lg text-gray-500 bg-white text-center cursor-pointer hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">Login</a>
+        </div>
+    {% endif %}
 </header>

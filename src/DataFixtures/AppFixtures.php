@@ -239,13 +239,12 @@ class AppFixtures extends Fixture
         // Users
         $countries = UserCountryEnum::cases();
         $userInstances = [];
-        foreach ($usersData as $i => $userData) {
+        foreach ($usersData as $userIndex => $userData) {
             $user = new User();
             $user->setUsername($userData['username']);
             $user->setEmail($userData['email']);
-            $user->setPlainPassword('password');
-            $user->setProfilePicture('https://avatar.iran.liara.run/public/' . ($i + 1));
-            $user->setBanner('https://picsum.photos/id/' . ($i + 1) . '/1920/1080');
+            $user->setPlainPassword('stunning');
+            $user->setBanner('https://picsum.photos/id/' . ($userIndex + 1) . '/1920/1080');
             $user->setWebsiteLink('https://example.com/' . $userData['username']);
             $user->setCountry($countries[array_rand($countries)]);
 
@@ -278,7 +277,7 @@ class AppFixtures extends Fixture
         foreach ($technologiesData as $technologyData) {
             $technology = new Technology();
             $technology->setName($technologyData['name']);
-            $technology->setLogo($technologyData['logo']);
+            $technology->setLogo(''); // $technologyData['logo']
             $manager->persist($technology);
             $technologyInstances[] = $technology;
         }
@@ -413,9 +412,9 @@ class AppFixtures extends Fixture
             $projectInstances[] = $project;
         }
 
-        // Associate Groups and Comments to Users
+        // Associate Groups / Comments to Users, and distribute Projects among Groups
         foreach ($userInstances as $user) {
-            $numberOfGroups = rand(1, 3);
+            $numberOfGroups = rand(1, 2);
             $groupsForUser = array_rand($groupsData, $numberOfGroups);
             if (!is_array($groupsForUser)) $groupsForUser = [$groupsForUser];
 
@@ -427,13 +426,6 @@ class AppFixtures extends Fixture
                 $group->setOwner($user);
                 $manager->persist($group);
                 $groupInstances[] = $group;
-            }
-
-            $userProjects = $user->getProjects();
-            foreach ($userProjects as $project) {
-                $randomGroup = $groupInstances[array_rand($groupInstances)];
-                $randomGroup->addProject($project);
-                $manager->persist($randomGroup);
             }
 
             // Comments
@@ -453,6 +445,17 @@ class AppFixtures extends Fixture
                         : $comment->setProjectPrivateInformations($randomProject->getPrivateInformations());
 
                     $manager->persist($comment);
+                }
+            }
+
+            // Projects among Groups
+            $userProjects = $user->getProjects()->toArray();
+            if (count($userProjects) > 0) {
+                foreach ($groupInstances as $group) {
+                    foreach ($userProjects as $project) {
+                        $group->addProject($project);
+                        $manager->persist($group);
+                    }
                 }
             }
         }
