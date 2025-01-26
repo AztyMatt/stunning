@@ -10,6 +10,10 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityController extends AbstractController
 {
@@ -55,6 +59,87 @@ class SecurityController extends AbstractController
         }
         return $this->render('security/register.html.twig', [
             'error' => $error,
+        ]);
+    }
+
+    #[Route(path: '/forgot', name: 'app_forgot')]
+    public function forgot(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        if ($request->isMethod('POST')) {
+            $userEmail = $request->get('_email');
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $userEmail]);
+
+            if (!$user) {
+                $this->addFlash('error', 'User not found.');
+                return $this->redirectToRoute('app_forgot');
+            } else {
+                $resetToken = Uuid::v4();
+                $user->setResetToken($resetToken);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $resetUrl = $this->generateUrl('reset', ['token' => $resetToken], 0);
+                $email = (new TemplatedEmail())
+                    ->from($_ENV['MAIL_USER'])
+                    ->to($userEmail)
+                    ->subject('Password Reset Request')
+                    ->htmlTemplate('email/reset.html.twig')
+                    ->context([
+                        'resetUrl' => $resetUrl,
+                        'userEmail' => $userEmail
+                    ]);
+
+                $mailer->send($email);
+
+                $this->addFlash('success', 'A reset email has been sent.');
+                return $this->redirectToRoute('app_forgot');
+            }
+        }
+
+        return $this->render(view: 'security/forgot.html.twig');
+    }
+
+    #[Route(path: '/reset/{token}', name: 'reset')]
+    public function reset(string $token, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!Uuid::isValid($token)) {
+            $this->addFlash('error', 'Invalid reset token.');
+            return $this->redirectToRoute('app_forgot');
+        }
+
+        $user = $entityManager->getRepository(User::class)->findOneBy(['resetToken' => $token]);
+
+        if (!$user) {
+            $this->addFlash('error', 'Invalid or expired reset token.');
+            return $this->redirectToRoute('app_forgot');
+        }
+
+        if ($request->isMethod('POST')) {
+            $password = $request->get('_password');
+            $repeatPassword = $request->get('_repeat_password');
+
+            if (empty($password) || empty($repeatPassword)) {
+                $this->addFlash('error', 'Password cannot be empty.');
+                return $this->redirectToRoute('reset', ['token' => $token]);
+            }
+
+            if ($password !== $repeatPassword) {
+                $this->addFlash('error', 'Passwords do not match.');
+                return $this->redirectToRoute('reset', ['token' => $token]);
+            }
+
+            $hashedPassword = $passwordHasher->hashPassword($user, $password);
+            $user->setPassword($hashedPassword);
+            $user->setResetToken(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/reset.html.twig', [
+            'token' => $token,
+            'email' => $user->getEmail()
         ]);
     }
 
