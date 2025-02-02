@@ -6,7 +6,6 @@ use App\Enum\ProjectVisibilityEnum;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -32,11 +31,11 @@ class Project
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToOne(inversedBy: 'project', cascade: ['persist', 'remove'])]
-    private ?ProjectPublicInformations $publicInformations = null;
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
+    private ?PublicInformations $publicInformations = null;
 
-    #[ORM\OneToOne(inversedBy: 'project', cascade: ['persist', 'remove'])]
-    private ?ProjectPrivateInformations $privateInformations = null;
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
+    private ?PrivateInformations $privateInformations = null;
 
     /**
      * @var Collection<int, User>
@@ -146,24 +145,24 @@ class Project
         return $this;
     }
 
-    public function getPublicInformations(): ?ProjectPublicInformations
+    public function getPublicInformations(): ?PublicInformations
     {
         return $this->publicInformations;
     }
 
-    public function setPublicInformations(?ProjectPublicInformations $publicInformations): static
+    public function setPublicInformations(?PublicInformations $publicInformations): static
     {
         $this->publicInformations = $publicInformations;
 
         return $this;
     }
 
-    public function getPrivateInformations(): ?ProjectPrivateInformations
+    public function getPrivateInformations(): ?PrivateInformations
     {
         return $this->privateInformations;
     }
 
-    public function setPrivateInformations(?ProjectPrivateInformations $privateInformations): static
+    public function setPrivateInformations(?PrivateInformations $privateInformations): static
     {
         $this->privateInformations = $privateInformations;
 

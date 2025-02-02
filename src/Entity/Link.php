@@ -20,10 +20,10 @@ class Link
     private ?string $url = null;
 
     #[ORM\ManyToOne(inversedBy: 'links')]
-    private ?ProjectPublicInformations $projectPublicInformations = null;
+    private ?PublicInformations $publicInformations = null;
 
     #[ORM\ManyToOne(inversedBy: 'links')]
-    private ?ProjectPrivateInformations $projectPrivateInformations = null;
+    private ?PrivateInformations $privateInformations = null;
 
     public function getId(): ?int
     {
@@ -54,26 +54,26 @@ class Link
         return $this;
     }
 
-    public function getProjectPublicInformations(): ?ProjectPublicInformations
+    public function getPublicInformations(): ?PublicInformations
     {
-        return $this->projectPublicInformations;
+        return $this->publicInformations;
     }
 
-    public function setProjectPublicInformations(?ProjectPublicInformations $projectPublicInformations): static
+    public function setPublicInformations(?PublicInformations $publicInformations): static
     {
-        $this->projectPublicInformations = $projectPublicInformations;
+        $this->publicInformations = $publicInformations;
 
         return $this;
     }
 
-    public function getProjectPrivateInformations(): ?ProjectPrivateInformations
+    public function getPrivateInformations(): ?PrivateInformations
     {
-        return $this->projectPrivateInformations;
+        return $this->privateInformations;
     }
 
-    public function setProjectPrivateInformations(?ProjectPrivateInformations $projectPrivateInformations): static
+    public function setPrivateInformations(?PrivateInformations $privateInformations): static
     {
-        $this->projectPrivateInformations = $projectPrivateInformations;
+        $this->privateInformations = $privateInformations;
 
         return $this;
     }

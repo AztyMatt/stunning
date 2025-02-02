@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\ProjectPublicInformations;
+use App\Entity\PrivateInformations;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ProjectPublicInformations>
+ * @extends ServiceEntityRepository<PrivateInformations>
  */
-class ProjectPublicInformationsRepository extends ServiceEntityRepository
+class PrivateInformationsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProjectPublicInformations::class);
+        parent::__construct($registry, PrivateInformations::class);
     }
 
     //    /**
-    //     * @return ProjectPublicInformations[] Returns an array of ProjectPublicInformations objects
+    //     * @return PrivateInformations[] Returns an array of PrivateInformations objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ProjectPublicInformationsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?ProjectPublicInformations
+    //    public function findOneBySomeField($value): ?PrivateInformations
     //    {
     //        return $this->createQueryBuilder('p')
     //            ->andWhere('p.exampleField = :val')

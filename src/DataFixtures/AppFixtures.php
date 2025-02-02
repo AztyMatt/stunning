@@ -7,8 +7,8 @@ use App\Entity\SocialMedias;
 use App\Entity\Tag;
 use App\Entity\Technology;
 use App\Entity\Project;
-use App\Entity\ProjectPublicInformations;
-use App\Entity\ProjectPrivateInformations;
+use App\Entity\PublicInformations;
+use App\Entity\PrivateInformations;
 use App\Entity\Media;
 use App\Entity\Link;
 use App\Entity\Invitation;
@@ -284,10 +284,22 @@ class AppFixtures extends Fixture
 
         // Projects
         $projectInstances = [];
+        $publicProjectsCount = 0;
+        $privateProjectsCount = 0;
         foreach ($projectsCommonData as $projectData) {
             $project = new Project();
+
+            // Avoid having too many private projects
+            if ($publicProjectsCount < 6) {
+                $project->setVisibility(ProjectVisibilityEnum::PUBLIC);
+                $publicProjectsCount++;
+            } elseif ($privateProjectsCount < 2) {
+                $project->setVisibility(ProjectVisibilityEnum::PRIVATE);
+                $privateProjectsCount++;
+            } else {
+                continue;
+            }
             $project->setName($projectData['name']);
-            if (rand(0, 1)) $project->setVisibility(ProjectVisibilityEnum::PRIVATE);
             $project->setNumberOfViews(rand(0, 1000));
             $project->setLikes(rand(0, 1000));
 
@@ -319,17 +331,18 @@ class AppFixtures extends Fixture
             }
 
             // (Public Informations)
-            $projectPublicInformations = new ProjectPublicInformations();
-            $projectPublicInformations->setDescription($projectData['description']);
-            $project->setPublicInformations($projectPublicInformations);
-            $manager->persist($projectPublicInformations);
+            $publicInformations = new PublicInformations();
+            $publicInformations->setDescription($projectData['description']);
+            $publicInformations->setProject($project);
+            $project->setPublicInformations($publicInformations);
+            $manager->persist($publicInformations);
 
             // Medias in Project (Public Informations)
             foreach ($projectData['medias'] as $mediaData) {
                 $media = new Media();
                 $media->setFile($mediaData['url']);
                 $media->setType($mediaData['type']);
-                $media->setProjectPublicInformations($projectPublicInformations);
+                $media->setPublicInformations($publicInformations);
                 $manager->persist($media);
             }
 
@@ -344,15 +357,16 @@ class AppFixtures extends Fixture
                 $link = new Link();
                 $link->setName($linkData['name']);
                 $link->setUrl($linkData['url']);
-                $link->setProjectPublicInformations($projectPublicInformations);
+                $link->setPublicInformations($publicInformations);
                 $manager->persist($link);
             }
 
             // (Private Informations)
-            $projectPrivateInformations = new ProjectPrivateInformations();
-            $projectPrivateInformations->setDocumentation($projectData['documentation']);
-            $project->setPrivateInformations($projectPrivateInformations);
-            $manager->persist($projectPrivateInformations);
+            $privateInformations = new PrivateInformations();
+            $privateInformations->setDescription($projectData['documentation']);
+            $privateInformations->setProject($project);
+            $project->setPrivateInformations($privateInformations);
+            $manager->persist($privateInformations);
 
             // Medias in Project (Private Informations)
             $numberOfPrivateMedias = rand(1, count($mediasPrivateData));
@@ -364,7 +378,7 @@ class AppFixtures extends Fixture
                 $media = new Media();
                 $media->setFile($mediaData['url']);
                 $media->setType($mediaData['type']);
-                $media->setProjectPrivateInformations($projectPrivateInformations);
+                $media->setPrivateInformations($privateInformations);
                 $manager->persist($media);
             }
 
@@ -379,7 +393,7 @@ class AppFixtures extends Fixture
                 $link = new Link();
                 $link->setName($linkData['name']);
                 $link->setUrl($linkData['url']);
-                $link->setProjectPrivateInformations($projectPrivateInformations);
+                $link->setPrivateInformations($privateInformations);
                 $manager->persist($link);
             }
 
@@ -441,8 +455,8 @@ class AppFixtures extends Fixture
 
                     $randomProject = $projectInstances[array_rand($projectInstances)];
                     random_int(0, 1)
-                        ? $comment->setProjectPublicInformations($randomProject->getPublicInformations())
-                        : $comment->setProjectPrivateInformations($randomProject->getPrivateInformations());
+                        ? $comment->setPublicInformations($randomProject->getPublicInformations())
+                        : $comment->setPrivateInformations($randomProject->getPrivateInformations());
 
                     $manager->persist($comment);
                 }
@@ -452,10 +466,14 @@ class AppFixtures extends Fixture
             $userProjects = $user->getProjects()->toArray();
             if (count($userProjects) > 0) {
                 foreach ($groupInstances as $group) {
-                    foreach ($userProjects as $project) {
-                        $group->addProject($project);
-                        $manager->persist($group);
+                    $numberOfProjectsInGroup = rand(1, count($userProjects));
+                    $projectsInGroup = array_rand($userProjects, $numberOfProjectsInGroup);
+                    if (!is_array($projectsInGroup)) $projectsInGroup = [$projectsInGroup];
+
+                    foreach ($projectsInGroup as $projectIndex) {
+                        $group->addProject($userProjects[$projectIndex]);
                     }
+                    $manager->persist($group);
                 }
             }
         }

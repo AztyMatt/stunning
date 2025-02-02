@@ -2,42 +2,39 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectPrivateInformationsRepository;
+use App\Repository\PublicInformationsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectPrivateInformationsRepository::class)]
-class ProjectPrivateInformations
+#[ORM\Entity(repositoryClass: PublicInformationsRepository::class)]
+class PublicInformations extends ProjectInformations
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $documentation = null;
-
-    #[ORM\OneToOne(mappedBy: 'privateInformations', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'publicInformations', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', nullable: false)]
     private ?Project $project = null;
 
     /**
      * @var Collection<int, Link>
      */
-    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'projectPrivateInformations')]
+    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'publicInformations')]
     private Collection $links;
 
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'projectPrivateInformations')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'publicInformations')]
     private Collection $medias;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'projectPrivateInformations')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publicInformations')]
     private Collection $comments;
 
     public function __construct()
@@ -52,18 +49,6 @@ class ProjectPrivateInformations
         return $this->id;
     }
 
-    public function getDocumentation(): ?string
-    {
-        return $this->documentation;
-    }
-
-    public function setDocumentation(?string $documentation): static
-    {
-        $this->documentation = $documentation;
-
-        return $this;
-    }
-
     public function getProject(): ?Project
     {
         return $this->project;
@@ -73,12 +58,12 @@ class ProjectPrivateInformations
     {
         // unset the owning side of the relation if necessary
         if ($project === null && $this->project !== null) {
-            $this->project->setPrivateInformations(null);
+            $this->project->setPublicInformations(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($project !== null && $project->getPrivateInformations() !== $this) {
-            $project->setPrivateInformations($this);
+        if ($project !== null && $project->getPublicInformations() !== $this) {
+            $project->setPublicInformations($this);
         }
 
         $this->project = $project;
@@ -98,7 +83,7 @@ class ProjectPrivateInformations
     {
         if (!$this->links->contains($link)) {
             $this->links->add($link);
-            $link->setProjectPrivateInformations($this);
+            $link->setPublicInformations($this);
         }
 
         return $this;
@@ -108,8 +93,8 @@ class ProjectPrivateInformations
     {
         if ($this->links->removeElement($link)) {
             // set the owning side to null (unless already changed)
-            if ($link->getProjectPrivateInformations() === $this) {
-                $link->setProjectPrivateInformations(null);
+            if ($link->getPublicInformations() === $this) {
+                $link->setPublicInformations(null);
             }
         }
 
@@ -128,7 +113,7 @@ class ProjectPrivateInformations
     {
         if (!$this->medias->contains($media)) {
             $this->medias->add($media);
-            $media->setProjectPrivateInformations($this);
+            $media->setPublicInformations($this);
         }
 
         return $this;
@@ -138,8 +123,8 @@ class ProjectPrivateInformations
     {
         if ($this->medias->removeElement($media)) {
             // set the owning side to null (unless already changed)
-            if ($media->getProjectPrivateInformations() === $this) {
-                $media->setProjectPrivateInformations(null);
+            if ($media->getPublicInformations() === $this) {
+                $media->setPublicInformations(null);
             }
         }
 
@@ -158,7 +143,7 @@ class ProjectPrivateInformations
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setProjectPrivateInformations($this);
+            $comment->setPublicInformations($this);
         }
 
         return $this;
@@ -168,8 +153,8 @@ class ProjectPrivateInformations
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getProjectPrivateInformations() === $this) {
-                $comment->setProjectPrivateInformations(null);
+            if ($comment->getPublicInformations() === $this) {
+                $comment->setPublicInformations(null);
             }
         }
 
