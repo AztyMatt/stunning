@@ -25,7 +25,7 @@ class SocialMedias
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $figma = null;
 
-    #[ORM\OneToOne(mappedBy: 'socialMedias', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'socialMedias')]
     private ?User $owner = null;
 
     public function getId(): ?int
@@ -74,7 +74,7 @@ class SocialMedias
         return $this->figma;
     }
 
-    public function setFigma(string $figma): static
+    public function setFigma(?string $figma): static
     {
         $this->figma = $figma;
 
@@ -101,5 +101,13 @@ class SocialMedias
         $this->owner = $owner;
 
         return $this;
+    }
+
+    public function areAllFieldsNull(): bool
+    {
+        return $this->xTwitter === null &&
+               $this->instagram === null &&
+               $this->github === null &&
+               $this->figma === null;
     }
 }

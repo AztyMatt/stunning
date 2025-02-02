@@ -39,13 +39,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $websiteLink = null;
 
-    #[ORM\Column(nullable: true, enumType: UserCountryEnum::class)]
+    #[ORM\Column(enumType: UserCountryEnum::class, nullable: true)]
     private ?UserCountryEnum $country = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToOne(inversedBy: 'owner', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'owner', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?SocialMedias $socialMedias = null;
 
     /**
@@ -89,7 +89,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
         $this->groups = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->invitations = new ArrayCollection();
         $this->invitationsSent = new ArrayCollection();
         $this->invitationsReceived = new ArrayCollection();
         $this->projects = new ArrayCollection();

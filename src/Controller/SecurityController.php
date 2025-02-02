@@ -9,11 +9,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Repository\UserRepository;
 
 class SecurityController extends AbstractController
 {
@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, ManagerRegistry $doctrine): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $error = null;
         if ($request->isMethod('POST')) {
@@ -41,20 +41,15 @@ class SecurityController extends AbstractController
                 $error = 'Invalid email address.';
             } elseif ($password !== $repeatPassword) {
                 $error = 'Passwords do not match.';
+            } elseif ($userRepository->isEmailAlreadyUsed($email)) {
+                $error = 'Email address already in use.';
             } else {
-                $existingUser = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
-                if ($existingUser) {
-                    $error = 'Email address already in use.';
-                } else {
-                    $username = strstr($email, '@', true);
-                    $user = new User();
-                    $user->setUsername($username);
-                    $user->setEmail($email);
-                    $user->setPlainPassword($password);
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-                    return $this->redirectToRoute('app_login');
-                }
+                $user = new User();
+                $user->setEmail($email);
+                $user->setPlainPassword($password);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_login');
             }
         }
         return $this->render('security/register.html.twig', [

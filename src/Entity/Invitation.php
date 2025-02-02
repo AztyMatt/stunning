@@ -20,11 +20,11 @@ class Invitation
     private ?string $message = null;
 
     #[ORM\ManyToOne(inversedBy: 'invitations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn]
     private ?Project $project = null;
 
     #[ORM\ManyToOne(inversedBy: 'invitationsSent')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?User $sender = null;
 
     /**
@@ -74,12 +74,14 @@ class Invitation
 
     public function setSender(?User $sender): static
     {
-        if (!$this->project) {
-            throw new \LogicException("Cannot send invitation: the project is not set.");
-        }
+        if ($sender !== null) {
+            if (!$this->project) {
+                throw new \LogicException("Cannot send invitation: the project is not set.");
+            }
 
-        if (!$this->project->getUsers()->contains($sender)) {
-            throw new \LogicException("Cannot send invitation: the user is not part of the project.");
+            if (!$this->project->getUsers()->contains($sender)) {
+                throw new \LogicException("Cannot send invitation: the user is not part of the project.");
+            }
         }
 
         $this->sender = $sender;

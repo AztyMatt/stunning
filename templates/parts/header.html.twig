@@ -3,9 +3,9 @@
         <h1 class="text-4xl font-semibold"><a href="{{ path('home') }}">Stunning</a></h1>
         {% if app.user and is_granted('ROLE_ADMIN') %}
             <div class="bg-white text-black border-2 border-black rounded">
-                <a href="#" class="flex items-center gap-2 px-4 py-2">
-                <twig:ux:icon name="tabler:database" height="24" width="24" />
-                <span>Admin</span>
+                <a href="{{ path('admin') }}" class="flex items-center gap-2 px-4 py-2">
+                    <twig:ux:icon name="tabler:database" height="24" width="24" />
+                    <span>Admin</span>
                 </a>
             </div>
         {% endif %}
