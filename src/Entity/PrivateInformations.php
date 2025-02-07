@@ -22,19 +22,19 @@ class PrivateInformations extends ProjectInformations
     /**
      * @var Collection<int, Link>
      */
-    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'privateInformations')]
+    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'privateInformations', cascade: ['persist'])]
     private Collection $links;
 
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'privateInformations')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'privateInformations', cascade: ['persist'])]
     private Collection $medias;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'privateInformations')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'privateInformations', cascade: ['persist'])]
     private Collection $comments;
 
     public function __construct()

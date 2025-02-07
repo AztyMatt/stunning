@@ -1,0 +1,272 @@
+{{ form_start(form, {'attr': {'class': 'relative flex gap-6 flex-col max-w-lg w-full bg-white border border-gray-500 shadow rounded-lg overflow-hidden p-8'}}) }}
+    {% if form_errors(form) %}
+        <div>
+            <p class="text-md text-gray-700">Generic error(s)</p>
+            <div class="text-sm text-red-500">
+                {{ form_errors(form) }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="relative flex flex-col gap-5">
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.visibility, 'Visibility', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.visibility, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.visibility) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.numberOfViews, 'Number of Views', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.numberOfViews, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.numberOfViews) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.likes, 'Likes' ~ (form.likes.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.likes, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.likes) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.users, 'Users' ~ (form.users.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="flex flex-col">
+                {% for choice in form.users %}
+                    <div class="flex items-center gap-1 text-sm text-gray-700">
+                        {{ form_widget(choice) }}
+                        {{ form_label(choice, null, {'label_attr': {'class': 'text-md'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.users) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.createdAt, 'Created At' ~ (form.createdAt.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.createdAt, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.createdAt) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            <p class="text-md text-gray-700">Technologies</p>
+            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_technologies" data-prototype="{{ form_widget(form.technologies.vars.prototype)|e('html') }}">
+                {% if form.technologies|length > 0 %}
+                    {% for technology in form.technologies %}
+                        <div class="flex flex-col gap-0.5" id="form_technologies_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                            {{ form_label(technology.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                            {{ form_widget(technology.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                            <div class="text-sm text-red-500">
+                                {{ form_errors(technology.name) }}
+                            </div>
+                        </div>
+                        <hr class="my-2 border-gray-700">
+                    {% endfor %}
+                {% endif %}
+                <div id="new_technologies" class="flex flex-col gap-2"></div>
+                <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_technology_button">Add Technology</button>
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            <p class="text-md text-gray-700">Tags</p>
+            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html') }}">
+                {% if form.tags|length > 0 %}
+                    {% for tag in form.tags %}
+                        <div class="flex flex-col gap-0.5" id="form_tags_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                            {{ form_label(tag.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                            {{ form_widget(tag.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                            <div class="text-sm text-red-500">
+                                {{ form_errors(tag.name) }}
+                            </div>
+                        </div>
+                        <hr class="my-2 border-gray-700">
+                    {% endfor %}
+                {% endif %}
+                <div id="new_tags" class="flex flex-col gap-2"></div>
+                <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_tag_button">Add Tag</button>
+            </div>
+        </div>
+        <hr class="my-2 border-gray-700">
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.publicInformations, 'Public Informations', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.publicInformations) }}
+            </div>
+            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4">
+                {{ form_label(form.publicInformations.description, 'Description' ~ (form.publicInformations.description.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+                {{ form_widget(form.publicInformations.description, {'attr': {'class': 'block w-full border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2', 'rows': 4}}) }}
+                <div class="text-sm text-red-500">
+                    {{ form_errors(form.publicInformations.description) }}
+                </div>
+                <p class="text-md text-gray-700">Links</p>
+                    <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_publicInformations_links" data-prototype="{{ form_widget(form.publicInformations.links.vars.prototype)|e('html') }}">
+                        {% if form.publicInformations.links|length > 0 %}
+                            {% for link in form.publicInformations.links %}
+                                <div class="flex flex-col gap-0.5" id="form_publicInformations_links_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                    {{ form_label(link.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                    {{ form_widget(link.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                    <div class="text-sm text-red-500">
+                                        {{ form_errors(link.name) }}
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-0.5" id="form_publicInformations_links_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                    {{ form_label(link.url, 'URL <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                    {{ form_widget(link.url, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                    <div class="text-sm text-red-500">
+                                        {{ form_errors(link.url) }}
+                                    </div>
+                                </div>
+                                <hr class="my-2 border-gray-700">
+                            {% endfor %}
+                        {% endif %}
+                    <div id="new_publicInformations_links" class="flex flex-col gap-2"></div>
+                    <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_link_button">Add Link</button>
+                </div>
+                <p class="text-md text-gray-700">Medias <span class="text-red-500 text-sm">(At least one)</span></p>
+                <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_publicInformations_medias" data-prototype="{{ form_widget(form.publicInformations.medias.vars.prototype)|e('html') }}">
+                    {% if form.publicInformations.medias|length > 0 %}
+                        {% for media in form.publicInformations.medias %}
+                            <div class="flex flex-col gap-0.5" id="form_publicInformations_medias_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                {{ form_label(media.file, 'File <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                {{ form_widget(media.file, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                <div class="text-sm text-red-500">
+                                    {{ form_errors(media.file) }}
+                                </div>
+                            </div>
+                            <hr class="my-2 border-gray-700">
+                        {% endfor %}
+                    {% endif %}
+                    <div id="new_publicInformations_medias" class="flex flex-col gap-2"></div>
+                    <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_media_button">Add Media</button>
+                </div>
+            </div>
+        </div>
+        <hr class="my-2 border-gray-700">
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.privateInformations, 'Private Informations', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.privateInformations) }}
+            </div>
+            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4">
+                {{ form_label(form.privateInformations.description, 'Description' ~ (form.privateInformations.description.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+                {{ form_widget(form.privateInformations.description, {'attr': {'class': 'block w-full border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2', 'rows': 4}}) }}
+                <div class="text-sm text-red-500">
+                    {{ form_errors(form.privateInformations.description) }}
+                </div>
+                <p class="text-md text-gray-700">Links</p>
+                <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_privateInformations_links" data-prototype="{{ form_widget(form.privateInformations.links.vars.prototype)|e('html') }}">
+                    {% if form.privateInformations.links|length > 0 %}
+                        {% for link in form.privateInformations.links %}
+                            <div class="flex flex-col gap-0.5" id="form_privateInformations_links_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                {{ form_label(link.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                {{ form_widget(link.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                <div class="text-sm text-red-500">
+                                    {{ form_errors(link.name) }}
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-0.5" id="form_privateInformations_links_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                {{ form_label(link.url, 'URL <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                {{ form_widget(link.url, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                <div class="text-sm text-red-500">
+                                    {{ form_errors(link.url) }}
+                                </div>
+                            </div>
+                            <hr class="my-2 border-gray-700">
+                        {% endfor %}
+                    {% endif %}
+                    <div id="new_privateInformations_links" class="flex flex-col gap-2"></div>
+                    <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_private_link_button">Add Link</button>
+                </div>
+                <p class="text-md text-gray-700">Medias</p>
+                <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_privateInformations_medias" data-prototype="{{ form_widget(form.privateInformations.medias.vars.prototype)|e('html') }}">
+                    {% if form.privateInformations.medias|length > 0 %}
+                        {% for media in form.privateInformations.medias %}
+                            <div class="flex flex-col gap-0.5" id="form_privateInformations_medias_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+                                {{ form_label(media.file, 'File <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                                {{ form_widget(media.file, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                                <div class="text-sm text-red-500">
+                                    {{ form_errors(media.file) }}
+                                </div>
+                            </div>
+                            <hr class="my-2 border-gray-700">
+                        {% endfor %}
+                    {% endif %}
+                    <div id="new_privateInformations_medias" class="flex flex-col gap-2"></div>
+                    <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_private_media_button">Add Media</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2 flex flex-row gap-4">
+            <button type="submit" class="py-2 px-4 max-w-xl w-full border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script>
+    document.getElementById('add_link_button').addEventListener('click', function() {
+        addInput('publicInformations', 'links');
+    });
+
+    document.getElementById('add_private_link_button').addEventListener('click', function() {
+        addInput('privateInformations', 'links');
+    });
+
+    document.getElementById('add_technology_button').addEventListener('click', function() {
+        addInput('', 'technologies');
+    });
+
+    document.getElementById('add_tag_button').addEventListener('click', function() {
+        addInput('', 'tags');
+    });
+
+    document.getElementById('add_media_button').addEventListener('click', function() {
+        addInput('publicInformations', 'medias');
+    });
+
+    document.getElementById('add_private_media_button').addEventListener('click', function() {
+        addInput('privateInformations', 'medias');
+    });
+
+    function addInput(type, category) {
+        var prefix = type ? type + '_' : '';
+        var container = document.getElementById('new_' + prefix + category);
+        var existingItems = document.querySelectorAll('[id^="form_' + prefix + category + '_"]');
+        
+        var lastIndex = existingItems.length > 0
+            ? Math.max(...Array.from(existingItems).map(item => {
+                var index = parseInt(item.getAttribute('data-index'), 10);
+                return !isNaN(index) ? index : 0;
+            }))
+            : -1;
+
+        var newIndex = lastIndex + 1;
+        var prototype = document.getElementById('form_' + prefix + category).dataset.prototype;
+        var newForm = prototype.replace(/__name__/g, newIndex);
+        var div = document.createElement('div');
+        div.innerHTML = newForm;
+
+        div.querySelectorAll('[id]').forEach(element => element.id += '_' + newIndex);
+        div.querySelectorAll('[for]').forEach(element => element.htmlFor += '_' + newIndex);
+
+        var hr = document.createElement('hr');
+        hr.className = 'my-2 border-gray-700';
+
+        var itemDiv = document.createElement('div');
+        itemDiv.className = 'flex flex-col gap-0.5';
+        itemDiv.id = 'form_' + prefix + category + '_' + newIndex;
+        itemDiv.setAttribute('data-index', newIndex);
+        itemDiv.innerHTML = div.querySelector('div').innerHTML;
+        itemDiv.appendChild(hr);
+
+        container.appendChild(itemDiv);
+        container.appendChild(hr);
+    }
+</script>

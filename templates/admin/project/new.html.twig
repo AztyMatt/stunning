@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Project{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-center items-center overflow-auto">
+        <section class="relative w-full h-full flex justify-center z-10">
+            <div class="relative flex flex-col w-full">
+                {% include 'admin/header.html.twig' with {'title': 'Create new Project', 'button_link': path('app_project_index')} %}
+                <div class="px-8 py-4 w-full flex justify-center">
+                    {{ include('admin/project/_form.html.twig', {'button_label': 'Create'}) }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -46,13 +46,13 @@ class Project
     /**
      * @var Collection<int, Technology>
      */
-    #[ORM\ManyToMany(targetEntity: Technology::class, inversedBy: 'projects')]
+    #[ORM\ManyToMany(targetEntity: Technology::class, inversedBy: 'projects', cascade: ['persist'])]
     private Collection $technologies;
 
     /**
      * @var Collection<int, Tag>
      */
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'projects')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'projects', cascade: ['persist'])]
     private Collection $tags;
 
     /**

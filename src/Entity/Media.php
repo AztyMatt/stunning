@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Enum\MediaTypeEnum;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Validator\Constraints as AppAssert;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -15,6 +16,7 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[AppAssert\ImageUrl] // ?
     private ?string $file = null;
 
     #[ORM\Column(enumType: MediaTypeEnum::class)]

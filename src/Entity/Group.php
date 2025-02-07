@@ -21,7 +21,7 @@ class Group
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'groups')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     private ?User $owner = null;
 
     /**

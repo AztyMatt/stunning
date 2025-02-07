@@ -18,13 +18,13 @@ class Technology
     #[ORM\Column(length: 30)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $logo = null;
+    #[ORM\Column(options: ["default" => false])]
+    private ?bool $hasBrandLogo = false;
 
     /**
      * @var Collection<int, Project>
      */
-    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'technologies')]
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'technologies', cascade: ['persist'])] // cascade useless ?
     private Collection $projects;
 
     public function __construct()
@@ -49,14 +49,14 @@ class Technology
         return $this;
     }
 
-    public function getLogo(): ?string
+    public function hasBrandLogo(): ?bool
     {
-        return $this->logo;
+        return $this->hasBrandLogo;
     }
 
-    public function setLogo(string $logo): static
+    public function setHasBrandLogo(bool $hasBrandLogo): static
     {
-        $this->logo = $logo;
+        $this->hasBrandLogo = $hasBrandLogo;
 
         return $this;
     }

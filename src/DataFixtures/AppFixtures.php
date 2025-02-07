@@ -25,16 +25,16 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $usersData = [
-            ['username' => 'Alice', 'email' => 'alice@example.com'],
-            ['username' => 'Bob', 'email' => 'bob@example.com'],
-            ['username' => 'Charlie', 'email' => 'charlie@example.com'],
-            ['username' => 'Dave', 'email' => 'dave@example.com'],
-            ['username' => 'Eve', 'email' => 'eve@example.com'],
-            ['username' => 'Frank', 'email' => 'frank@example.com'],
-            ['username' => 'Grace', 'email' => 'grace@example.com'],
-            ['username' => 'Heidi', 'email' => 'heidi@example.com'],
-            ['username' => 'Ivan', 'email' => 'ivan@example.com'],
-            ['username' => 'Judy', 'email' => 'judy@example.com'],
+            'alice@example.com',
+            'bob@example.com',
+            'charlie@example.com',
+            'dave@example.com',
+            'eve@example.com',
+            'frank@example.com',
+            'grace@example.com',
+            'heidi@example.com',
+            'ivan@example.com',
+            'judy@example.com',
         ];
 
         $projectsCommonData = [
@@ -166,26 +166,26 @@ class AppFixtures extends Fixture
         ];
 
         $technologiesData = [
-            ['name' => 'Symfony', 'logo' => 'tabler:brand-symfony'],
-            ['name' => 'React', 'logo' => 'tabler:brand-react'],
-            ['name' => 'Django', 'logo' => 'tabler:brand-django'],
-            ['name' => 'Spring', 'logo' => 'tabler:brand-spring'],
-            ['name' => 'ASP.NET', 'logo' => 'tabler:brand-aspnet'],
-            ['name' => 'Rails', 'logo' => 'tabler:brand-rails'],
-            ['name' => 'Gin', 'logo' => 'tabler:brand-gin'],
-            ['name' => 'SwiftUI', 'logo' => 'tabler:brand-swiftui'],
-            ['name' => 'Ktor', 'logo' => 'tabler:brand-ktor'],
-            ['name' => 'Angular', 'logo' => 'tabler:brand-angular'],
-            ['name' => 'PHP', 'logo' => 'tabler:brand-php'],
-            ['name' => 'JavaScript', 'logo' => 'tabler:brand-javascript'],
-            ['name' => 'Python', 'logo' => 'tabler:brand-python'],
-            ['name' => 'Java', 'logo' => 'tabler:brand-java'],
-            ['name' => 'C#', 'logo' => 'tabler:brand-csharp'],
-            ['name' => 'Ruby', 'logo' => 'tabler:brand-ruby'],
-            ['name' => 'Go', 'logo' => 'tabler:brand-go'],
-            ['name' => 'Swift', 'logo' => 'tabler:brand-swift'],
-            ['name' => 'Kotlin', 'logo' => 'tabler:brand-kotlin'],
-            ['name' => 'TypeScript', 'logo' => 'tabler:brand-typescript']
+            ['name' => 'Symfony'],
+            ['name' => 'React'],
+            ['name' => 'Django'],
+            ['name' => 'Spring'],
+            ['name' => 'ASP.NET'],
+            ['name' => 'Rails'],
+            ['name' => 'Gin'],
+            ['name' => 'Swift'],
+            ['name' => 'Ktor'],
+            ['name' => 'Angular'],
+            ['name' => 'PHP'],
+            ['name' => 'JavaScript'],
+            ['name' => 'Python'],
+            ['name' => 'Java'],
+            ['name' => 'C#'],
+            ['name' => 'Ruby'],
+            ['name' => 'Go'],
+            ['name' => 'Swift'],
+            ['name' => 'Kotlin'],
+            ['name' => 'TypeScript']
         ];
 
         $mediasPrivateData = [
@@ -239,22 +239,21 @@ class AppFixtures extends Fixture
         // Users
         $countries = UserCountryEnum::cases();
         $userInstances = [];
-        foreach ($usersData as $userIndex => $userData) {
+        foreach ($usersData as $userIndex => $email) {
             $user = new User();
-            $user->setUsername($userData['username']);
-            $user->setEmail($userData['email']);
+            $user->setEmail($email);
             $user->setPlainPassword('stunning');
             $user->setBanner('https://picsum.photos/id/' . ($userIndex + 1) . '/1920/1080');
-            $user->setWebsiteLink('https://example.com/' . $userData['username']);
+            $user->setWebsiteLink('https://example.com/' . (strstr($email, '@', true)));
             $user->setCountry($countries[array_rand($countries)]);
 
             // SocialMedias for user
             if (rand(0, 1)) {
                 $socialMedias = new SocialMedias();
-                if (rand(0, 1)) $socialMedias->setXTwitter('https://twitter.com/' . $userData['username']);
-                if (rand(0, 1)) $socialMedias->setInstagram('https://instagram.com/' . $userData['username']);
-                if (rand(0, 1)) $socialMedias->setGithub('https://github.com/' . $userData['username']);
-                if (rand(0, 1)) $socialMedias->setFigma('https://figma.com/@' . $userData['username']);
+                if (rand(0, 1)) $socialMedias->setXTwitter('https://twitter.com/' . (strstr($email, '@', true)));
+                if (rand(0, 1)) $socialMedias->setInstagram('https://instagram.com/' . (strstr($email, '@', true)));
+                if (rand(0, 1)) $socialMedias->setGithub('https://github.com/' . (strstr($email, '@', true)));
+                if (rand(0, 1)) $socialMedias->setFigma('https://figma.com/@' . (strstr($email, '@', true)));
                 $user->setSocialMedias($socialMedias);
                 $manager->persist($socialMedias);
             }
@@ -262,6 +261,14 @@ class AppFixtures extends Fixture
             $manager->persist($user);
             $userInstances[] = $user;
         }
+
+        // Admin User
+        $admin = new User();
+        $admin->setEmail('admin@stunning.com');
+        $admin->setPlainPassword('$stunning$');
+        $admin->setRoles(['ROLE_ADMIN']);
+
+        $manager->persist($admin);
 
         // Tags
         $tagInstances = [];
@@ -277,7 +284,6 @@ class AppFixtures extends Fixture
         foreach ($technologiesData as $technologyData) {
             $technology = new Technology();
             $technology->setName($technologyData['name']);
-            $technology->setLogo(''); // $technologyData['logo']
             $manager->persist($technology);
             $technologyInstances[] = $technology;
         }

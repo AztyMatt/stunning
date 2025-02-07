@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-between items-center overflow-hidden">
+        <section class="relative w-full h-full flex flex-col justify-between z-10">
+            <div class="relative flex flex-col w-full h-full">
+                {% include 'admin/header.html.twig' with {'title': 'Project', 'button_link': path('app_project_index')} %}
+                <div class="h-full overflow-auto flex-grow">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Id</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.id }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Visibility</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.visibility ? project.visibility.value : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Number of Views</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.numberOfViews }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Likes</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.likes }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Created At</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Technologies</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            {% if project.technologies %}
+                                                {% for technology in project.technologies %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ technology.name }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No technologies</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Tags</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            {% if project.tags %}
+                                                {% for tag in project.tags %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">#{{ tag.name }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No tags</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Public Informations</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Description</th>
+                                                <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ project.publicInformations.description }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Links</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.publicInformations.links %}
+                                                                {% for link in project.publicInformations.links %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ link.name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">URL</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words"><a href="{{ link.url }}" class="text-blue-500 hover:underline">{{ link.url }}</a></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No links</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Medias</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.publicInformations.medias %}
+                                                                {% for media in project.publicInformations.medias %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">File</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ media.file }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No medias</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Private Informations</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Description</th>
+                                                <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ project.privateInformations.description }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Links</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.privateInformations.links %}
+                                                                {% for link in project.privateInformations.links %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ link.name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">URL</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words"><a href="{{ link.url }}" class="text-blue-500 hover:underline">{{ link.url }}</a></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No links</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Medias</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.privateInformations.medias %}
+                                                                {% for media in project.privateInformations.medias %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">File</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ media.file }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">No medias</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex flex-row justify-end gap-2 px-8 py-4 border border-gray-300 flex-shrink-0">
+                    <a href="{{ path('app_project_edit', {'id': project.id}) }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">Edit</a>
+                    {{ include('admin/project/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

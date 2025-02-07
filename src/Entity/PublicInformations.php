@@ -6,6 +6,7 @@ use App\Repository\PublicInformationsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PublicInformationsRepository::class)]
 class PublicInformations extends ProjectInformations
@@ -22,19 +23,24 @@ class PublicInformations extends ProjectInformations
     /**
      * @var Collection<int, Link>
      */
-    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'publicInformations')]
+    #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'publicInformations', cascade: ['persist'])]
     private Collection $links;
 
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'publicInformations')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'publicInformations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Count(
+        min: 1,
+        minMessage: 'Public Informations need at least one media.'
+    )] // ?
     private Collection $medias;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publicInformations')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publicInformations', cascade: ['persist'])]
     private Collection $comments;
 
     public function __construct()

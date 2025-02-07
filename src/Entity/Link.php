@@ -19,10 +19,10 @@ class Link
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
-    #[ORM\ManyToOne(inversedBy: 'links')]
+    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])] // cascade useless ?
     private ?PublicInformations $publicInformations = null;
 
-    #[ORM\ManyToOne(inversedBy: 'links')]
+    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])] // cascade useless ?
     private ?PrivateInformations $privateInformations = null;
 
     public function getId(): ?int
