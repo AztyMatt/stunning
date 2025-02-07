@@ -10,7 +10,6 @@ use Doctrine\ORM\Events;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsEntityListener(event: Events::preFlush, method: 'hashPassword', entity: User::class)]
-
 class UserPasswordListener
 {
     public function __construct(

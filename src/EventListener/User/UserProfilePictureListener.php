@@ -9,7 +9,6 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 
 #[AsEntityListener(event: Events::preFlush, method: 'handleEmptyProfilePicture', entity: User::class, priority: 50)]
-
 class UserProfilePictureListener
 {
     public function handleEmptyProfilePicture(User $user): void

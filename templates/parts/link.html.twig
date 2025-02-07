@@ -1,4 +1,4 @@
 {% set url = url | default('#') %}
 <a href="{{ url }}" class="flex justify-center items-center py-2 px-4 bg-white border border-gray-300 shadow rounded-lg">
-    <span class="text-md font-semibold">#{{ text }}</span>
+    <span class="text-md font-semibold">{{ url == '#' ? '#' ~ text : text }}</span>
 </a>
