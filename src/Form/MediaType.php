@@ -26,6 +26,7 @@ class MediaType extends AbstractType
                 'constraints' => [
                     new ImageUrl(),
                 ],
+                'empty_data' => ''
             ])
         ;
     }

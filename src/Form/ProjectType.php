@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Project;
+use App\Entity\Technology;
 use App\Enum\ProjectVisibilityEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,11 +13,20 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ProjectType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $currentUser = $this->security->getUser();
         $builder
             ->add('name', null, [
                 'required' => true
@@ -45,22 +55,21 @@ class ProjectType extends AbstractType
                 'expanded' => true,
                 'required' => false,
                 'by_reference' => false,
+                'data' => $currentUser ? [$currentUser] : [],
+                'choice_attr' => function ($user) use ($currentUser) {
+                    return $user === $currentUser ? ['disabled' => 'disabled'] : [];
+                },
             ])
             ->add('createdAt', null, [
                 'widget' => 'single_text',
                 'required' => false
             ])
-            ->add('technologies', CollectionType::class, [
-                'label' => false,
-                'entry_type' => TechnologyType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'required' => false,
-                'empty_data' => function () {
-                    return new ArrayCollection();
-                },
+            ->add('technologies', EntityType::class, [
+                'class' => Technology::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false
             ])
             ->add('tags', CollectionType::class, [
                 'label' => false,
@@ -78,12 +87,12 @@ class ProjectType extends AbstractType
             ->add('publicInformations', PublicInformationsType::class, [
                 'label' => false,
                 'required' => false,
-                'by_reference' => false,
+                'by_reference' => true,
             ])
             ->add('privateInformations', PrivateInformationsType::class, [
                 'label' => false,
                 'required' => false,
-                'by_reference' => false,
+                'by_reference' => true,
             ])
         ;
     }

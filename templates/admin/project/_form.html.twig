@@ -57,23 +57,18 @@
                 {{ form_errors(form.createdAt) }}
             </div>
         </div>
-        <div class="flex flex-col gap-0.5">
-            <p class="text-md text-gray-700">Technologies</p>
-            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4" id="form_technologies" data-prototype="{{ form_widget(form.technologies.vars.prototype)|e('html') }}">
-                {% if form.technologies|length > 0 %}
-                    {% for technology in form.technologies %}
-                        <div class="flex flex-col gap-0.5" id="form_technologies_{{ loop.index0 }}" data-index="{{ loop.index0 }}">
-                            {{ form_label(technology.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
-                            {{ form_widget(technology.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
-                            <div class="text-sm text-red-500">
-                                {{ form_errors(technology.name) }}
-                            </div>
-                        </div>
-                        <hr class="my-2 border-gray-700">
-                    {% endfor %}
-                {% endif %}
-                <div id="new_technologies" class="flex flex-col gap-2"></div>
-                <button type="button" class="py-2 px-4 border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300" id="add_technology_button">Add Technology</button>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.technologies, 'Technologies' ~ (form.technologies.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="flex flex-col">
+                {% for choice in form.technologies %}
+                    <div class="flex items-center gap-1 text-sm text-gray-700">
+                        {{ form_widget(choice) }}
+                        {{ form_label(choice, null, {'label_attr': {'class': 'text-md'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.technologies) }}
             </div>
         </div>
         <div class="flex flex-col gap-0.5">
@@ -217,10 +212,6 @@
 
     document.getElementById('add_private_link_button').addEventListener('click', function() {
         addInput('privateInformations', 'links');
-    });
-
-    document.getElementById('add_technology_button').addEventListener('click', function() {
-        addInput('', 'technologies');
     });
 
     document.getElementById('add_tag_button').addEventListener('click', function() {

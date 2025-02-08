@@ -40,141 +40,147 @@
                     </span>
                 </div>
             </div>
-            {% include('parts/media.html.twig') with { 'media': project.publicInformations.medias[0] } %}
+            {% include('parts/media.html.twig') with { 'media': project.publicInformations.medias[0] | default(null) } %}
         </section>
         <section class="flex flex-col">
             {% if app.user and project.users.contains(app.user) %}
-                <nav class="px-8 overflow-x-auto border-b border-gray-300 shadow-lg">
-                    <div class="flex items-center space-x-4">
-                        <button class="tab-button py-4 px-4 border-b-2 border-black focus:outline-none" onclick="switchTab('public-section')">Public</button>
+                {% if project.privateInformations %}
+                    <nav class="px-8 overflow-x-auto border-b border-gray-300 shadow-lg">
+                        <div class="flex items-center space-x-4">
+                            <button class="tab-button py-4 px-4 border-b-2 border-black focus:outline-none" onclick="switchTab('public-section')">Public</button>
+                            
+                                <button class="tab-button py-4 px-4 border-b-2 border-transparent focus:outline-none" onclick="switchTab('private-section')">Private</button>
                         
-                            <button class="tab-button py-4 px-4 border-b-2 border-transparent focus:outline-none" onclick="switchTab('private-section')">Private</button>
-                    
-                    </div>
-                </nav>
+                        </div>
+                    </nav>
+                {% endif %}
             {% endif %}
-            <div id="public-section" class="tab-content p-8 flex flex-col gap-8">
-                {% if project.publicInformations.description %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Description</h2>
-                        <div class="flex flex-col gap-2">
-                            <p class="text-lg text-gray-500 mb-1">{{ project.publicInformations.description }}</p>
-                            <div class="flex flex-row justify-between">
-                                <div class="flex flex-row gap-3">
-                                    {% for tag in project.tags %}
-                                        {% include('parts/link.html.twig') with { 'text': tag.name } %}
-                                    {% endfor %}
-                                </div>
-                                <p class="text-lg text-gray-500">Project uploaded the {{ project.createdAt|date('d/m/Y') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if project.users|length > 0 %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Contributors</h2>
-                        <div class="flex gap-2">
-                            {% for user in project.users %}
-                                <a href="{{ path('profile_view', {'id': user.id}) }}" class="flex justify-center items-center p-2 pr-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
-                                    <img src="{{ user.profilePicture }}" alt="Profile picture of {{ user.username }}" class="w-8 h-8 rounded-full">
-                                    <span class="text-md font-semibold">{{ user.username }}</span>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-                {% if project.publicInformations.medias|length > 0 %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Gallery</h2>
-                        <div class="overflow-x-auto whitespace-nowrap">
-                            <div class="h-[500px] overflow-x-auto whitespace-nowrap inline-flex gap-3">
-                                {% for media in project.publicInformations.medias %}
-                                    {% include('parts/media.html.twig') with { 'card': true } %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if project.technologies|length > 0 %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Technologies</h2>
-                        <div class="flex gap-3">
-                            {% for technology in project.technologies %}
-                                <div class="flex justify-center items-center py-2 px-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
-                                    {% if technology.hasBrandlogo %}
-                                        <img src="https://logo.clearbit.com/{{technology.name|url_encode}}.com" class="h-6 w-6 object-contain rounded-lg" alt="{{technology.name}} logo" />
-                                    {% endif %}
-                                    <span class="text-md font-semibold">{{ technology.name }}</span>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-                {% if project.publicInformations.links|length > 0 %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Useful Links</h2>
-                        <div class="flex gap-3">
-                            {% for link in project.publicInformations.links %}
-                                {% include('parts/link.html.twig') with { 'text': link.name, 'url': link.url } %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-                {% if project.publicInformations.comments|length > 0 %}
-                    <div class="flex flex-col gap-3">
-                        <h2 class="text-2xl font-semibold">Comments</h2>
+            {% if project.publicInformations %}
+                <div id="public-section" class="tab-content p-8 flex flex-col gap-8">
+                    {% if project.publicInformations.description %}
                         <div class="flex flex-col gap-3">
-                            {% for comment in project.publicInformations.comments %}
-                                {% include('parts/comment.html.twig') %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-
-            {% if app.user and project.users.contains(app.user) %}
-                <div id="private-section" class="tab-content hidden p-8 flex flex-col gap-8">
-                    {% if project.privateInformations.description %}
-                        <div class="flex flex-col gap-3">
-                            <h2 class="text-2xl font-semibold">Documentation</h2>
+                            <h2 class="text-2xl font-semibold">Description</h2>
                             <div class="flex flex-col gap-2">
-                                <p class="text-lg text-gray-500">{{ project.privateInformations.description }}</p>
+                                <p class="text-lg text-gray-500 mb-1">{{ project.publicInformations.description }}</p>
+                                <div class="flex flex-row justify-between">
+                                    <div class="flex flex-row gap-3">
+                                        {% for tag in project.tags %}
+                                            {% include('parts/link.html.twig') with { 'text': tag.name } %}
+                                        {% endfor %}
+                                    </div>
+                                    <p class="text-lg text-gray-500">Project uploaded the {{ project.createdAt|date('d/m/Y') }}</p>
+                                </div>
                             </div>
                         </div>
                     {% endif %}
-                    {% if project.privateInformations.medias|length > 0 %}
+                    {% if project.users|length > 0 %}
+                        <div class="flex flex-col gap-3">
+                            <h2 class="text-2xl font-semibold">Contributors</h2>
+                            <div class="flex gap-2">
+                                {% for user in project.users %}
+                                    <a href="{{ path('profile_view', {'id': user.id}) }}" class="flex justify-center items-center p-2 pr-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
+                                        <img src="{{ user.profilePicture }}" alt="Profile picture of {{ user.username }}" class="w-8 h-8 rounded-full">
+                                        <span class="text-md font-semibold">{{ user.username }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if project.publicInformations.medias|length > 0 %}
                         <div class="flex flex-col gap-3">
                             <h2 class="text-2xl font-semibold">Gallery</h2>
                             <div class="overflow-x-auto whitespace-nowrap">
                                 <div class="h-[500px] overflow-x-auto whitespace-nowrap inline-flex gap-3">
-                                    {% for media in project.privateInformations.medias %}
+                                    {% for media in project.publicInformations.medias %}
                                         {% include('parts/media.html.twig') with { 'card': true } %}
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                     {% endif %}
-                    {% if project.privateInformations.links|length > 0 %}
+                    {% if project.technologies|length > 0 %}
                         <div class="flex flex-col gap-3">
-                            <h2 class="text-2xl font-semibold">Links</h2>
+                            <h2 class="text-2xl font-semibold">Technologies</h2>
                             <div class="flex gap-3">
-                                {% for link in project.privateInformations.links %}
+                                {% for technology in project.technologies %}
+                                    <div class="flex justify-center items-center py-2 px-4 gap-2 bg-white border border-gray-300 shadow rounded-lg">
+                                        {% if technology.logo %}
+                                            <img src="{{technology.logo}}" class="h-6 w-6 object-contain rounded-lg" alt="{{technology.name}} logo" />
+                                        {% endif %}
+                                        <span class="text-md font-semibold">{{ technology.name }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if project.publicInformations.links|length > 0 %}
+                        <div class="flex flex-col gap-3">
+                            <h2 class="text-2xl font-semibold">Useful Links</h2>
+                            <div class="flex gap-3">
+                                {% for link in project.publicInformations.links %}
                                     {% include('parts/link.html.twig') with { 'text': link.name, 'url': link.url } %}
                                 {% endfor %}
                             </div>
                         </div>
                     {% endif %}
-                    {% if project.privateInformations.comments|length > 0 %}
+                    {% if project.publicInformations.comments|length > 0 %}
                         <div class="flex flex-col gap-3">
                             <h2 class="text-2xl font-semibold">Comments</h2>
                             <div class="flex flex-col gap-3">
-                                {% for comment in project.privateInformations.comments %}
+                                {% for comment in project.publicInformations.comments %}
                                     {% include('parts/comment.html.twig') %}
                                 {% endfor %}
                             </div>
                         </div>
                     {% endif %}
                 </div>
+            {% endif %}
+
+            {% if app.user and project.users.contains(app.user) %}
+                {% if project.privateInformations %}
+                    <div id="private-section" class="tab-content hidden p-8 flex flex-col gap-8">
+                        {% if project.privateInformations.description %}
+                            <div class="flex flex-col gap-3">
+                                <h2 class="text-2xl font-semibold">Documentation</h2>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-lg text-gray-500">{{ project.privateInformations.description }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if project.privateInformations.medias|length > 0 %}
+                            <div class="flex flex-col gap-3">
+                                <h2 class="text-2xl font-semibold">Gallery</h2>
+                                <div class="overflow-x-auto whitespace-nowrap">
+                                    <div class="h-[500px] overflow-x-auto whitespace-nowrap inline-flex gap-3">
+                                        {% for media in project.privateInformations.medias %}
+                                            {% include('parts/media.html.twig') with { 'card': true } %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if project.privateInformations.links|length > 0 %}
+                            <div class="flex flex-col gap-3">
+                                <h2 class="text-2xl font-semibold">Links</h2>
+                                <div class="flex gap-3">
+                                    {% for link in project.privateInformations.links %}
+                                        {% include('parts/link.html.twig') with { 'text': link.name, 'url': link.url } %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if project.privateInformations.comments|length > 0 %}
+                            <div class="flex flex-col gap-3">
+                                <h2 class="text-2xl font-semibold">Comments</h2>
+                                <div class="flex flex-col gap-3">
+                                    {% for comment in project.privateInformations.comments %}
+                                        {% include('parts/comment.html.twig') %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endif %}
         </section>
     </main>

@@ -7,14 +7,14 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 
-#[AsEntityListener(event: Events::preFlush, method: 'initializeProjectInformations', entity: Project::class)]
+#[AsEntityListener(event: Events::preFlush, method: 'initializeInformations', entity: Project::class)]
 class ProjectInformationsListener
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
     ) {}
 
-    public function initializeProjectInformations(Project $project): void
+    public function initializeInformations(Project $project): void
     {
         if ($project->getPublicInformations() && $project->getPublicInformations()->getProject() === null) {
             $project->getPublicInformations()->setProject($project);

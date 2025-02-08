@@ -23,9 +23,11 @@ class Media
     private ?MediaTypeEnum $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PublicInformations $publicInformations = null;
 
     #[ORM\ManyToOne(inversedBy: 'medias')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PrivateInformations $privateInformations = null;
 
     public function getId(): ?int

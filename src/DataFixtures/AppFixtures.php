@@ -460,9 +460,13 @@ class AppFixtures extends Fixture
                     $comment->setAuthor($user);
 
                     $randomProject = $projectInstances[array_rand($projectInstances)];
-                    random_int(0, 1)
-                        ? $comment->setPublicInformations($randomProject->getPublicInformations())
-                        : $comment->setPrivateInformations($randomProject->getPrivateInformations());
+                    if (in_array($user, $randomProject->getUsers()->toArray())) {
+                        random_int(0, 1)
+                            ? $comment->setPublicInformations($randomProject->getPublicInformations())
+                            : $comment->setPrivateInformations($randomProject->getPrivateInformations());
+                    } else {
+                        $comment->setPublicInformations($randomProject->getPublicInformations());
+                    }
 
                     $manager->persist($comment);
                 }

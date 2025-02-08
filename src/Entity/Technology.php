@@ -18,8 +18,8 @@ class Technology
     #[ORM\Column(length: 30)]
     private ?string $name = null;
 
-    #[ORM\Column(options: ["default" => false])]
-    private ?bool $hasBrandLogo = false;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logo = null;
 
     /**
      * @var Collection<int, Project>
@@ -49,14 +49,14 @@ class Technology
         return $this;
     }
 
-    public function hasBrandLogo(): ?bool
+    public function getLogo(): ?string
     {
-        return $this->hasBrandLogo;
+        return $this->logo;
     }
 
-    public function setHasBrandLogo(bool $hasBrandLogo): static
+    public function setLogo(?string $logo): static
     {
-        $this->hasBrandLogo = $hasBrandLogo;
+        $this->logo = $logo;
 
         return $this;
     }

@@ -22,9 +22,11 @@ class Comment
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PublicInformations $publicInformations = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PrivateInformations $privateInformations = null;
 
     #[ORM\Column]
@@ -83,6 +85,13 @@ class Comment
 
     public function setPrivateInformations(?PrivateInformations $privateInformations): static
     {
+        if ($privateInformations !== null && $this->author !== null) {
+            $project = $privateInformations->getProject();
+            if ($project !== null && !$project->getUsers()->contains($this->author)) {
+                throw new \LogicException("Cannot add comment: the user is not part of the project.");
+            }
+        }
+
         $this->privateInformations = $privateInformations;
 
         return $this;

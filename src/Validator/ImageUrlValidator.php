@@ -4,7 +4,7 @@ namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 #[\Attribute]
 class ImageUrlValidator extends ConstraintValidator
@@ -18,7 +18,7 @@ class ImageUrlValidator extends ConstraintValidator
         }
 
         if (!is_string($value)) {
-            throw new UnexpectedValueException($value, 'string');
+            throw new UnexpectedTypeException($value, 'string');
         }
 
         if (!$this->isImageUrl($value)) {

@@ -25,6 +25,17 @@ class TechnologyType extends AbstractType
                 'required' => true,
                 'label_html' => true
             ])
+            ->add('logo', null, [
+                'label' => 'Logo',
+                'label_attr' => [
+                    'class' => 'block text-sm font-medium text-gray-700',
+                ],
+                'attr' => [
+                    'class' => 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2',
+                ],
+                'required' => false,
+                'label_html' => true
+            ])
         ;
     }
 

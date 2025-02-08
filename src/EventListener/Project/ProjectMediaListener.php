@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use App\Enum\MediaTypeEnum;
 use App\Validator\ImageUrlValidator;
 
+#[AsEntityListener(event: Events::preFlush, method: 'handleEmptyMediaFile', entity: Media::class)]
 #[AsEntityListener(event: Events::preFlush, method: 'handleImageType', entity: Media::class)]
 class ProjectMediaListener
 {
@@ -18,6 +19,15 @@ class ProjectMediaListener
         protected EntityManagerInterface $entityManager,
         protected ImageUrlValidator $imageUrlValidator
     ) {}
+
+    public function handleEmptyMediaFile(Media $media): void
+    {
+        $mediaFile = $media->getFile();
+
+        if (empty($mediaFile)) {
+            $this->entityManager->remove($media);
+        }
+    }
 
     public function handleImageType(Media $media): void
     {
