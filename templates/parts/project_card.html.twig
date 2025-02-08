@@ -3,7 +3,7 @@
 <a href="{{ path('project', {id: project.id}) }}" class="border border-gray-300 shadow-lg rounded-lg overflow-hidden block h-full">
     <div class="relative w-full aspect-[4/3] group">
         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex justify-between items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <h3 class="text-white text-xl">{{ project.name }}</h3>
+            <h3 class="text-white text-xl text-left">{{ project.name }}</h3>
             <span class="flex flex-row gap-4 text-white">
                 <span class="flex items-center gap-1">
                     <twig:ux:icon name="tabler:heart" height="24" width="24" />

@@ -46,6 +46,21 @@ class ProjectRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Project[] Returns an array of Project objects matching the search term
+     */
+    public function searchProjects($searchTerm): array
+    {
+        return $this->createQueryBuilder('project')
+            ->andWhere('project.visibility = :visibility')
+            ->andWhere('project.name LIKE :searchTerm')
+            ->setParameter('visibility', ProjectVisibilityEnum::PUBLIC->value)
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->orderBy('project.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Project[] Returns an array of Project objects
     //     */
