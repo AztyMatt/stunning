@@ -8,25 +8,63 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Enum\UserCountryEnum;
 use App\Enum\ProjectVisibilityEnum;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\SocialMedias;
 
 #[Route('/profile', name: 'profile_')]
 class ProfileController extends AbstractController
 {
     #[Route('/settings', name: 'settings', methods: ['GET', 'POST'])]
-    public function settings(): Response
+    public function settings(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /** @var \App\Entity\User|null $currentUser */
+        $currentUser = $this->getUser();
         $countries = UserCountryEnum::cases();
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            $fields = [
+                'username' => fn($value) => $currentUser->setUsername($value ?: null),
+                'country' => fn($value) => $currentUser->setCountry($value ? UserCountryEnum::from($value) : null),
+                'email' => fn($value) => $currentUser->setEmail($value ?: null),
+                'websiteLink' => fn($value) => $currentUser->setWebsiteLink($value ?: null)
+            ];
+            foreach ($fields as $field => $setter) {
+                $setter($data[$field]);
+            }
+
+            $socialMedias = $currentUser->getSocialMedias() ?? new SocialMedias();
+            $socialFields = [
+                'twitter' => fn($value) => $socialMedias->setXTwitter($value ?: null),
+                'instagram' => fn($value) => $socialMedias->setInstagram($value ?: null),
+                'github' => fn($value) => $socialMedias->setGithub($value ?: null),
+                'figma' => fn($value) => $socialMedias->setFigma($value ?: null)
+            ];
+            foreach ($socialFields as $field => $setter) {
+                $setter($data[$field]);
+            }
+            $currentUser->setSocialMedias($socialMedias);
+            
+            $entityManager->persist($currentUser);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('profile_settings');
+        }
 
         return $this->render('settings.html.twig', [
             'countries' => $countries,
         ]);
     }
-
+    
     #[Route('/{id}', name: 'view', methods: ['GET'])]
     public function profile(int $id, UserRepository $userRepository): Response
     {
-        $user = $userRepository->find($id);
+        /** @var \App\Entity\User|null $currentUser */
         $currentUser = $this->getUser();
+        $user = $userRepository->find($id);
+
         $isCurrentUser = $currentUser && $currentUser->getId() === $user->getId();
 
         $isProjectVisible = function ($project) use ($isCurrentUser): bool {

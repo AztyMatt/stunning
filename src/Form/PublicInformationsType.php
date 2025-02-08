@@ -49,6 +49,20 @@ class PublicInformationsType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('comments', CollectionType::class, [
+                'label' => false,
+                'label_html' => true,
+                'entry_type' => CommentType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'mapped' => true,
+                'required' => false,
+                'empty_data' => function () {
+                    return new ArrayCollection();
+                },
+            ])
         ;
     }
 

@@ -9,7 +9,7 @@
     {% endif %}
     <div class="relative flex flex-col gap-5">
         <div class="flex flex-col gap-0.5">
-            {{ form_label(form.name, 'Name <span class="text-red-500">*</span>', {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_label(form.name, 'Name' ~ (form.name.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
             {{ form_widget(form.name, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
             <div class="text-sm text-red-500">
                 {{ form_errors(form.name) }}

@@ -54,11 +54,7 @@ class ProjectType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
-                'by_reference' => false,
-                'data' => $currentUser ? [$currentUser] : [],
-                'choice_attr' => function ($user) use ($currentUser) {
-                    return $user === $currentUser ? ['disabled' => 'disabled'] : [];
-                },
+                'by_reference' => false
             ])
             ->add('createdAt', null, [
                 'widget' => 'single_text',
