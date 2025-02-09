@@ -7,6 +7,11 @@ use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Validator\Constraints as AppAssert;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
 {
@@ -15,8 +20,9 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column(length: 255)]
-    #[AppAssert\ImageUrl] // ?
+    #[AppAssert\ImageUrl]
     private ?string $file = null;
 
     #[ORM\Column(enumType: MediaTypeEnum::class)]

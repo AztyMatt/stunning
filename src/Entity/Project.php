@@ -8,29 +8,49 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiSubresource;
+
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['project:read']],
+)]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
+    #[Groups(['project:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column(length: 40)]
     private ?string $name = null;
 
     #[ORM\Column(enumType: ProjectVisibilityEnum::class)]
     private ?ProjectVisibilityEnum $visibility = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column]
     private ?int $numberOfViews = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column]
     private ?int $likes = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['project:read'])]
+    #[ApiSubresource]
     #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
     private ?PublicInformations $publicInformations = null;
 

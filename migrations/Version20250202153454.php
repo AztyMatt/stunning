@@ -7,9 +7,6 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20250202153454 extends AbstractMigration
 {
     public function getDescription(): string
@@ -19,7 +16,6 @@ final class Version20250202153454 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE link DROP CONSTRAINT fk_36ac99f120ae5150');
         $this->addSql('ALTER TABLE project DROP CONSTRAINT fk_2fb3d0eeb6e1b683');
         $this->addSql('ALTER TABLE comment DROP CONSTRAINT fk_9474526c20ae5150');
@@ -76,7 +72,6 @@ final class Version20250202153454 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE comment DROP CONSTRAINT FK_9474526CDBB692DA');
         $this->addSql('ALTER TABLE link DROP CONSTRAINT FK_36AC99F1DBB692DA');

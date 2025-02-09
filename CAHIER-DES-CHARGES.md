@@ -41,3 +41,13 @@ Le site offre une partie publique pour tous les visiteurs et une partie privée 
 6. **Backend poussé (/admin/*)** :
    - Backend robuste permettant de gérer une grande majorité des fonctionnalités administratives et utilisateur.
    Cela inclut la gestion des projets, des utilisateurs et des technologies applicables aux projets.
+
+## (Mises à jour depuis la soutenance)
+- **Edition du profil utilisateur** : Les utilisateurs peuvent désormais éditer leurs informations personnelles depuis la page de personnalisation de leur profil.
+- **Recherche sur la page principale** : Une fonction de recherche a été ajoutée sur la page principale, permettant de rechercher des projets et des utilisateurs.
+- **Backend terminé** : Le backend a été finalisé.
+- **API de base implémentée** : Une API JSON publique est désormais en place, accessible en méthode GET via les routes suivantes :
+  - `/api/technologies`
+  - `/api/technologies/{id}`
+  - `/api/projects`
+  - `/api/projects/{id}`

@@ -6,6 +6,9 @@ use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiSubresource;
+
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -14,9 +17,12 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    #[Groups(['project:read'])]
+    #[ApiSubresource]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
@@ -29,6 +35,7 @@ class Comment
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PrivateInformations $privateInformations = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 

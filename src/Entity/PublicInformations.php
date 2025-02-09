@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiSubresource;
+
 #[ORM\Entity(repositoryClass: PublicInformationsRepository::class)]
 class PublicInformations extends ProjectInformations
 {
@@ -23,23 +26,29 @@ class PublicInformations extends ProjectInformations
     /**
      * @var Collection<int, Link>
      */
+    #[Groups(['project:read'])]
+    #[ApiSubresource]
     #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'publicInformations', cascade: ['persist'])]
     private Collection $links;
 
     /**
      * @var Collection<int, Media>
      */
+    #[Groups(['project:read'])]
+    #[ApiSubresource]
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'publicInformations', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\Count(
         min: 1,
         minMessage: 'Public Informations need at least one media.'
-    )] // ?
+    )]
     private Collection $medias;
 
     /**
      * @var Collection<int, Comment>
      */
+    #[Groups(['project:read'])]
+    #[ApiSubresource]
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publicInformations', cascade: ['persist'])]
     private Collection $comments;
 

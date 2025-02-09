@@ -5,6 +5,11 @@ namespace App\Entity;
 use App\Repository\LinkRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: LinkRepository::class)]
 class Link
 {
@@ -13,17 +18,19 @@ class Link
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column(length: 40)]
     private ?string $name = null;
 
+    #[Groups(['project:read'])]
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
-    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])] // cascade useless ?
+    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PublicInformations $publicInformations = null;
 
-    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])] // cascade useless ?
+    #[ORM\ManyToOne(inversedBy: 'links', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PrivateInformations $privateInformations = null;
 
