@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    {% include('parts/header.html.twig') %}
+    <main class="p-6 flex flex-col gap-12">
+        <section class="m-8 text-center">
+            <div class="flex flex-col gap-3">
+                <h1 class="text-4xl font-bold">Welcome to Stunning</h1>
+                <p class="text-lg text-gray-500 max-w-4xl mx-auto">Stunning is a platform where you can share your web projects, especially front-end projects, and collaborate with others. Discover new ideas, get feedback, and work together to create amazing web experiences.</p>
+            </div>
+            <div class="relative w-full max-w-4xl mx-auto mt-4">
+                <form action="{{ path('search') }}" method="get">
+                    <input type="text" name="query" placeholder="Research a project or an user..." class="px-4 py-2 border border-gray-300 shadow w-full rounded">
+                    <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-500">
+                        <twig:ux:icon name="tabler:search" height="24" width="24" class="h-6 w-6"/>
+                    </button>
+                </form>
+            </div>
+        </section>
+        <section class="flex flex-col gap-3">
+            <h2 class="text-3xl font-semibold">Projects recently added</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {% for project in recentProjects %}
+                    <div class="flex flex-col shadow-lg rounded-lg border border-gray-300">
+                        {% include 'parts/project_card.html.twig' with {'project': project, 'informations': true} %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+        <section class="flex flex-col gap-3">
+            <h2 class="text-3xl font-semibold">Popular right now</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {% for project in popularProjects %}
+                    <div class="flex flex-col shadow-lg rounded-lg border border-gray-300">
+                        {% include 'parts/project_card.html.twig' with {'project': project, 'informations': true} %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+{% endblock %}

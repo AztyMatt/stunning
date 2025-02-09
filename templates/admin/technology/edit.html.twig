@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Technology{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-center items-center overflow-auto">
+        <section class="relative w-full h-full flex justify-center z-10">
+            <div class="relative flex flex-col w-full">
+                {% include 'admin/header.html.twig' with {'title': 'Edit Technology', 'button_link': path('app_technology_index')} %}
+                <div class="px-8 py-4 w-full h-full flex justify-center items-center">
+                    {{ include('admin/technology/_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

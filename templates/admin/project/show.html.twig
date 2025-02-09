@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-between items-center overflow-hidden">
+        <section class="relative w-full h-full flex flex-col justify-between z-10">
+            <div class="relative flex flex-col w-full h-full">
+                {% include 'admin/header.html.twig' with {'title': 'Project', 'button_link': path('app_project_index')} %}
+                <div class="h-full overflow-auto flex-grow">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Id</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.id ? project.id : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.name ? project.name : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Visibility</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.visibility ? project.visibility.value : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Number of Views</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.numberOfViews ? project.numberOfViews : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Likes</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.likes ? project.likes : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Created At</th>
+                                <td class="px-8 py-4 whitespace-normal break-words">{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Technologies</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            {% if project.technologies is not empty %}
+                                                {% for technology in project.technologies %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ technology.name ? technology.name : 'NULL' }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Tags</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            {% if project.tags is not empty %}
+                                                {% for tag in project.tags %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">#{{ tag.name ? tag.name : 'NULL' }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Public Informations</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    {% if project.publicInformations %}
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Description</th>
+                                                <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ project.publicInformations.description ? project.publicInformations.description : 'NULL' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Links</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.publicInformations.links is not empty %}
+                                                                {% for link in project.publicInformations.links %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ link.name ? link.name : 'NULL' }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">URL</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words"><a href="{{ link.url ? link.url : 'NULL' }}" class="text-blue-500 hover:underline">{{ link.url ? link.url : 'NULL' }}</a></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Medias</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.publicInformations.medias %}
+                                                                {% for media in project.publicInformations.medias %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">File</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ media.file ? media.file : 'NULL' }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <p class="pr-8 py-4 text-[16px]">NULL</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Private Informations</th>
+                                <td class="px-8 whitespace-normal break-words">
+                                    {% if project.privateInformations %}
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Description</th>
+                                                <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ project.privateInformations.description ? project.privateInformations.description : 'NULL' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Links</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.privateInformations.links is not empty %}
+                                                                {% for link in project.privateInformations.links %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Name</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ link.name ? link.name : 'NULL' }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">URL</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words"><a href="{{ link.url ? link.url : 'NULL' }}" class="text-blue-500 hover:underline">{{ link.url ? link.url : 'NULL' }}</a></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10 align-top">Medias</th>
+                                                <td class="whitespace-normal break-words">
+                                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            {% if project.privateInformations.medias is not empty %}
+                                                                {% for media in project.privateInformations.medias %}
+                                                                    <tr>
+                                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">File</th>
+                                                                        <td class="pr-8 py-4 text-[16px] whitespace-normal break-words">{{ media.file ? media.file : 'NULL' }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <tr>
+                                                                    <td colspan="2" class="pr-8 py-4 text-[16px]">NULL</td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <p class="pr-8 py-4 text-[16px]">NULL</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex flex-row justify-end gap-2 px-8 py-4 border border-gray-300 flex-shrink-0">
+                    <a href="{{ path('app_project_edit', {'id': project.id}) }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">Edit</a>
+                    {{ include('admin/project/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% set passwordLabel = app.request.attributes.get('_route') == 'app_user_new' ? 'Password' : 'New Password' %}
+
+{{ form_start(form, {'attr': {'class': 'relative flex gap-6 flex-col max-w-lg w-full bg-white border border-gray-500 shadow rounded-lg overflow-hidden p-8'}}) }}
+    <div class="relative flex flex-col gap-5">
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.username, 'Username' ~ (form.username.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.username, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.username) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.email, 'Email' ~ (form.email.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.email) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.profilePicture, 'Profile Picture' ~ (form.profilePicture.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.profilePicture, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.profilePicture) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.banner, 'Banner' ~ (form.banner.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.banner, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.banner) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.websiteLink, 'Website Link' ~ (form.websiteLink.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.websiteLink, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.websiteLink) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.country, 'Country' ~ (form.country.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.country, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-1'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.country) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.roles, 'Rôles' ~ (form.roles.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="flex flex-col">
+                {% for choice in form.roles %}
+                    <div class="flex items-center gap-1 text-sm text-gray-700">
+                        {{ form_widget(choice) }}
+                        {{ form_label(choice, null, {'label_attr': {'class': 'text-md'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.roles) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            {{ form_label(form.plainPassword, passwordLabel ~ (form.plainPassword.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            {{ form_widget(form.plainPassword, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.plainPassword) }}
+            </div>
+        </div>
+        <div class="flex flex-col gap-0.5">
+            <p class="text-md text-gray-700">Social Medias</p>
+            <div class="flex flex-col gap-2 border border-gray-300 shadow rounded-lg p-4">
+                <div class="flex flex-col gap-0.5">
+                    {{ form_label(form.socialMedias.xTwitter, 'Twitter' ~ (form.socialMedias.xTwitter.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                    {{ form_widget(form.socialMedias.xTwitter, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                    <div class="text-sm text-red-500">
+                        {{ form_errors(form.socialMedias.xTwitter) }}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    {{ form_label(form.socialMedias.instagram, 'Instagram' ~ (form.socialMedias.instagram.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                    {{ form_widget(form.socialMedias.instagram, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                    <div class="text-sm text-red-500">
+                        {{ form_errors(form.socialMedias.instagram) }}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    {{ form_label(form.socialMedias.github, 'GitHub' ~ (form.socialMedias.github.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                    {{ form_widget(form.socialMedias.github, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                    <div class="text-sm text-red-500">
+                        {{ form_errors(form.socialMedias.github) }}
+                    </div>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    {{ form_label(form.socialMedias.figma, 'Figma' ~ (form.socialMedias.figma.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}, 'label_html': true}) }}
+                    {{ form_widget(form.socialMedias.figma, {'attr': {'class': 'block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2'}}) }}
+                    <div class="text-sm text-red-500">
+                        {{ form_errors(form.socialMedias.figma) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.projects, 'Projects' ~ (form.projects.vars.required ? ' <span class="text-red-500">*</span>' : ''), {'label_attr': {'class': 'block text-md font-medium text-gray-700'}, 'label_html': true}) }}
+            <div class="flex flex-col">
+                {% for choice in form.projects %}
+                    <div class="flex items-center gap-1 text-sm text-gray-700">
+                        {{ form_widget(choice) }}
+                        {{ form_label(choice, null, {'label_attr': {'class': 'text-md'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-sm text-red-500">
+                {{ form_errors(form.projects) }}
+            </div>
+        </div>
+        <div class="mt-2 flex flex-row gap-4">
+            <button type="submit" class="py-2 px-4 max-w-xl w-full border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-between items-center overflow-hidden">
+        <section class="relative w-full h-full flex flex-col justify-between z-10">
+            <div class="relative flex flex-col w-full h-full">
+                {% include 'admin/header.html.twig' with {'title': 'User', 'button_link': path('app_user_index')} %}
+                <div class="h-full overflow-auto flex-grow">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Id</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.id ? user.id : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Profile Picture</th>
+                                <td class="px-8 py-4 whitespace-nowrap flex items-center gap-2">
+                                    <img src="{{ user.profilePicture ? user.profilePicture : 'NULL' }}" alt="Profile picture of {{ user.username }}" class="w-8 h-8 rounded-full">
+                                    <span>|</span>
+                                    <span>{{ user.profilePicture ? user.profilePicture : 'NULL' }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Username</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.username ? user.username : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Email</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.email ? user.email : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Banner</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.banner ? user.banner : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Website Link</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">
+                                    {% if user.websiteLink %}
+                                        <a href="{{ user.websiteLink }}" class="text-blue-500 hover:underline">{{ user.websiteLink }}</a>
+                                    {% else %}
+                                        <p>NULL</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Country</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.country ? user.country.value : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Roles</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.roles ? user.roles|json_encode : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10">Created At</th>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : 'NULL' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-8 py-5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6 w-10 align-top">Social Media</th>
+                                <td class="px-8 whitespace-nowrap">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            {% if user.socialMedias %}
+                                                {% if user.socialMedias.xTwitter %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Twitter</th>
+                                                        <td class="py-4 text-[16px]"><a href="{{ user.socialMedias.xTwitter }}" class="text-blue-500 hover:underline">{{ user.socialMedias.xTwitter }}</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if user.socialMedias.instagram %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Instagram</th>
+                                                        <td class="py-4 text-[16px]"><a href="{{ user.socialMedias.instagram }}" class="text-blue-500 hover:underline">{{ user.socialMedias.instagram }}</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if user.socialMedias.github %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">GitHub</th>
+                                                        <td class="py-4 text-[16px]"><a href="{{ user.socialMedias.github }}" class="text-blue-500 hover:underline">{{ user.socialMedias.github }}</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if user.socialMedias.figma %}
+                                                    <tr>
+                                                        <th class="pr-8 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">Figma</th>
+                                                        <td class="py-4 text-[16px]"><a href="{{ user.socialMedias.figma }}" class="text-blue-500 hover:underline">{{ user.socialMedias.figma }}</a></td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="py-4 text-[16px]">NULL</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex flex-row justify-end gap-2 px-8 py-4 border border-gray-300 flex-shrink-0">
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">Edit</a>
+                    {{ include('admin/user/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

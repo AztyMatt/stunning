@@ -1,0 +1,7 @@
+{% set banner = banner | default(false) %}
+{% set bannerClass = banner ? 'opacity-25' : 'opacity-50' %}
+
+<div class="absolute inset-0 z-0 bg-black">
+    <img src="{{ asset('images/background.jpg') }}" alt="Background image" class="w-full h-full object-cover filter {{ banner ? 'blur-[2px] mt-8' : 'blur-[3px]' }}">
+    <div class="absolute inset-0 bg-black {{ bannerClass }}"></div>
+</div>

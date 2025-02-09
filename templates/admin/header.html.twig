@@ -1,0 +1,13 @@
+<div class="relative px-8 py-4 h-16 flex justify-between items-center bg-white shadow-lg w-full z-10">
+    <a href="{% if app.request.attributes.get('_route') == 'admin' %}{{ path('home') }}{% else %}{{ path('admin') }}{% endif %}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">
+        {% if app.request.attributes.get('_route') == 'admin' %}
+            Return to site
+        {% else %}
+            Return to admin
+        {% endif %}
+    </a>
+    <h1 class="text-2xl font-medium text-black">{{ title }}</h1>
+    {% if app.request.attributes.get('_route') != 'admin' %}
+        <a href="{{ button_link }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">{{ button_text|default('Back to list') }}</a>
+    {% endif %}
+</div>

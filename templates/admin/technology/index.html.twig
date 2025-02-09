@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Technology index{% endblock %}
+
+{% block body %}
+    <main class="relative h-screen w-screen flex flex-col justify-center items-center overflow-auto">
+        <section class="relative w-full h-full flex justify-center z-10">
+            <div class="relative flex flex-col w-full">
+                {% include 'admin/header.html.twig' with {'title': 'Technologies', 'button_link': path('app_technology_new'), 'button_text': 'Create new'} %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50 h-14">
+                            <tr>
+                                <th scope="col" class="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[50px]">Id</th>
+                                <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[150px]">Name</th>
+                                <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[150px]">Has Brand Logo</th>
+                                <th scope="col" class="px-8 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                        {% set sortedTechnologies = technologies|sort((tech1, tech2) => tech1.id <=> tech2.id) %}
+                        {% for technology in sortedTechnologies %}
+                            <tr>
+                                <td class="px-8 py-4 whitespace-nowrap truncate">{{ technology.id }}</td>
+                                <td class="px-2 py-4 whitespace-nowrap max-w-[150px] truncate">{{ technology.name }}</td>
+                                <td class="px-2 py-4 whitespace-nowrap max-w-[150px] truncate">{{ technology.logo }}</td>
+                                <td class="px-8 whitespace-nowrap">
+                                    <div class="flex flex-row justify-end gap-2">
+                                        <a href="{{ path('app_technology_show', {'id': technology.id}) }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">Show</a>
+                                        <a href="{{ path('app_technology_edit', {'id': technology.id}) }}" class="py-2 px-4 border border-gray-300 shadow text-sm font-medium rounded-lg text-gray-500 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-300">Edit</a>
+                                        {{ include('admin/technology/_delete_form.html.twig') }}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="px-8 py-4 whitespace-nowrap text-center text-sm text-gray-500">No records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

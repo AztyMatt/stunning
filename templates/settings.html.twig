@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+    {% include('parts/header.html.twig') %}
+    <main class="relative h-[calc(100vh-4rem)] w-screen flex flex-col">
+        {% include('parts/background.html.twig') %}
+        <section class="relative flex flex-col justify-center items-center h-full m-8 px-8">
+            <form method="post" action="{{ path('profile_settings') }}" class="relative flex flex-col max-w-xl w-full border border-gray-500 shadow rounded-lg overflow-hidden bg-white">
+                {% if app.user.banner %}
+                <div class="relative w-full h-40 group">
+                    <div class="absolute z-10 flex justify-center items-center w-full h-full">
+                        <button class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <twig:ux:icon name="tabler:camera" height="24" width="24" class="text-white"/>
+                        </button>
+                    </div>
+                    <img src="{{ app.user.banner }}" alt="Background image of {{ app.user.username }}" class="inset-0 w-full h-full object-cover bg-center group-hover:filter group-hover:brightness-50 transition-filter duration-300">
+                </div>
+                {% endif %}
+                <div class="relative flex flex-col gap-6 p-8">
+                    <div class="relative flex flex-row gap-8 justify-between w-full h-40">
+                        <div class="flex flex-col items-center justify-between w-2/5">
+                            <div class="relative group w-full h-full max-w-28 max-h-28">
+                                <div class="absolute z-10 flex justify-center items-center w-full h-full">
+                                    <button class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <twig:ux:icon name="tabler:camera" height="24" width="24" class="text-white"/>
+                                    </button>
+                                </div>
+                                <img src="{{ app.user.profilePicture }}" alt="Profile picture of {{ app.user.username }}" class="w-full h-full rounded-full object-contain group-hover:filter group-hover:brightness-50 transition-filter duration-300">
+                            </div>
+                            <div class="w-full relative">
+                                <input type="text" id="username" name="username" value="{{ app.user.username }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2 text-center">
+                                <span class="absolute text-red-500 -top-2 -right-3">*</span>
+                            </div>
+                        </div>
+                        <div class="w-full flex flex-col justify-between items-center text-gray-700">
+                            <div class="flex flex-row gap-2 items-center w-full">
+                                <twig:ux:icon name="tabler:brand-x" height="24" width="24" />
+                                <input type="url" id="twitter" name="twitter" value="{{ app.user.socialMedias.xTwitter|default('') }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                            </div>
+                            <div class="flex flex-row gap-2 items-center w-full">
+                                <twig:ux:icon name="tabler:brand-instagram" height="24" width="24" />
+                                <input type="url" id="instagram" name="instagram" value="{{ app.user.socialMedias.instagram|default('') }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                            </div>
+                            <div class="flex flex-row gap-2 items-center w-full">
+                                <twig:ux:icon name="tabler:brand-github" height="24" width="24" />
+                                <input type="url" id="github" name="github" value="{{ app.user.socialMedias.github|default('') }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                            </div>
+                            <div class="flex flex-row gap-2 items-center w-full">
+                                <twig:ux:icon name="tabler:brand-figma" height="24" width="24" />
+                                <input type="url" id="figma" name="figma" value="{{ app.user.socialMedias.figma|default('') }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <div class="flex flex-col justify-start gap-2">
+                            <div class="flex flex-col gap-4">
+                                {# <div class="flex flex-col gap-0.5">
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea id="description" name="description" rows="4" class="block w-full border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm py-1 px-2">{{ app.user.description|default('') }}</textarea>
+                                </div> #}
+                                <div class="flex flex-col gap-0.5 w-2/5">
+                                    <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                                    <select id="country" name="country" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-1">
+                                        {% for country in countries %}
+                                            <option value="{{ country.value }}" {% if app.user.country and app.user.country.value == country.value %}selected{% endif %}>{{ country.value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-0.5">
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                                    <input type="email" id="email" name="email" value="{{ app.user.email }}" required class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                                </div>
+                                <div class="flex flex-col gap-0.5">
+                                    <label for="websiteLink" class="block text-sm font-medium text-gray-700">Website Link</label>
+                                    <input type="url" id="websiteLink" name="websiteLink" value="{{ app.user.websiteLink|default('') }}" class="block w-full h-8 border border-gray-300 rounded-lg shadow focus:ring-gray-500 focus:border-gray-300 sm:text-sm px-2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="mt-2 py-2 px-4 max-w-xl w-full border border-gray-700 shadow text-sm font-medium rounded-lg text-gray-700 bg-white hover:text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white z-20 transition-all duration-300">Save Changes</button>
+                </div>
+            </form>
+        </section>
+    </main>
+{% endblock %}
